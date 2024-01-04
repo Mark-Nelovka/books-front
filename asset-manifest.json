@@ -1,0 +1,20 @@
+{
+  "files": {
+    "main.css": "/books-front/static/css/main.9fb7182e.css",
+    "main.js": "/books-front/static/js/main.ed718230.js",
+    "static/js/787.5353f109.chunk.js": "/books-front/static/js/787.5353f109.chunk.js",
+    "static/media/facebook-logo-icon.svg": "/books-front/static/media/facebook-logo-icon.a427e36de4651294faa0edd97c8d81c6.svg",
+    "static/media/google-logo-icon.svg": "/books-front/static/media/google-logo-icon.99ef0f65b267bd259474fbe7bb4103c9.svg",
+    "static/media/apple-logo-icon.svg": "/books-front/static/media/apple-logo-icon.99b411bfa1588033804c411d5089b670.svg",
+    "index.html": "/books-front/index.html",
+    "static/media/email-icon.svg": "/books-front/static/media/email-icon.cd5ea8340ff601494f70971db78d1c09.svg",
+    "static/media/close-button.svg": "/books-front/static/media/close-button.86b5b96d30947c2abdaf2d7a4f52c990.svg",
+    "main.9fb7182e.css.map": "/books-front/static/css/main.9fb7182e.css.map",
+    "main.ed718230.js.map": "/books-front/static/js/main.ed718230.js.map",
+    "787.5353f109.chunk.js.map": "/books-front/static/js/787.5353f109.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.9fb7182e.css",
+    "static/js/main.ed718230.js"
+  ]
+}

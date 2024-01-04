@@ -1,19 +1,38 @@
 import axios from "axios";
 import { createAction, createAsyncThunk } from "@reduxjs/toolkit";
-import { IRegistrationInfoUser } from "./types";
+import { IRegistrationInfoUser, ISignInInfoUser } from "./types";
 
 axios.defaults.baseURL = "https://p01--books--qqfgrnqblfk9.code.run/api/auth";
 
 const registrationUser = createAsyncThunk(
   "auth/registration",
   async (payload: IRegistrationInfoUser, thunkApi) => {
+    console.log("payloadRegistration: ", payload);
     try {
       const { data } = await axios.post(`/registration`, payload, {
         headers: {
           "Access-Control-Allow-Origin": "*",
         },
       });
-      console.log(data);
+      if(!data) throw data;
+      return data;
+    } catch (error) {
+      return thunkApi.rejectWithValue(error);
+    }
+  },
+);
+
+const signInUser = createAsyncThunk(
+  "auth/signIn",
+  async (payload: ISignInInfoUser, thunkApi) => {
+    console.log("payloadRegistration: ", payload);
+    try {
+      const { data } = await axios.post(`/login`, payload, {
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+        },
+      });
+      if(!data) throw data;
       return data;
     } catch (error) {
       return thunkApi.rejectWithValue(error);
@@ -118,6 +137,6 @@ const registrationUser = createAsyncThunk(
 //   }
 // );
 
-// const updatePage = createAction<number>("todos/updatePage");
+const resetError = createAction("auth/resetError");
 
-export { registrationUser };
+export { registrationUser, resetError, signInUser };

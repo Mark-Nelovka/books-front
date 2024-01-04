@@ -6,7 +6,7 @@ export default function PrivateRoute({ children }: { children: JSX.Element }) {
   const isToken = useAppSelector((state) => state.auth.token);
   useEffect(() => {
     if (!isToken) {
-      navigate("/registration");
+      navigate("/");
     }
   }, []);
 

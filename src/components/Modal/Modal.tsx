@@ -1,6 +1,6 @@
 import React from "react";
 import { createPortal } from "react-dom";
-import Form from "components/Form/Form";
+import Form from "components/Forms/LoginForm";
 import ModalComponent from "components/ModalComponent/ModalComponent";
 import Backdrop from "components/Backdrop/Backdrop";
 

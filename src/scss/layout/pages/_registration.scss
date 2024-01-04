@@ -1,0 +1,8 @@
+.reg_policy-container {
+    @include direction(flex, center, center, null, null);
+    margin-bottom: 16px;
+    margin-top: 16px;
+    & > label {
+        margin-left: 8px;
+    }
+}

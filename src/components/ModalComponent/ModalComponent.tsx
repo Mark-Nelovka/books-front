@@ -18,7 +18,7 @@ export default function ModalComponent({
         func={toggleFunc}
         style="modal__close-button"
         type="button"
-        data-backdrop="false" 
+        data-backdrop="false"
       >
         <img data-backdrop="false" src={closeIcon} alt="Icon for close modal" />
       </Button>

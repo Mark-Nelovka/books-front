@@ -4,8 +4,7 @@ import React, { Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
 import PrivateRoute from "routes/PrivateRoute";
 import PublickRoute from "routes/PublicRoute";
-import RegistrationPage from "pages/Auth/RegistrationPage";
-import LoginPage from "pages/Auth/LoginPage";
+import AuthPage from "pages/Auth/AuthPage";
 
 // const ErrorPage = lazy(
 //   () => import("pages/ErrorPage" /* webpackChunkName: "Error page" */)
@@ -23,7 +22,7 @@ function App() {
                 path="/"
                 element={
                   <PublickRoute>
-                    <LoginPage />
+                    <AuthPage />
                   </PublickRoute>
                 }
               />

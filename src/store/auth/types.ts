@@ -16,3 +16,8 @@ export interface IRegistrationInfoUser {
   name: string;
   lastName: string;
 }
+
+export interface ISignInInfoUser {
+  email: string;
+  password: string;
+}

@@ -1,15 +1,24 @@
-@mixin main-text($size: 18px, $weight: 400) {
+@mixin main-text($size: 18px, $weight: 400, $line-height: normal, $color: $gray-100) {
     font-size: $size;
     font-weight: $weight;
-    font-family: "Raleway";
+    line-height: $line-height;
+    color: $color;
   }
   
-  @mixin direction($display: flex, $justify: center, $align: center, $direction: row, $wrap: nowrap) {
+  @mixin direction($display: flex, $justify-content: initial, $align-items: null, $flex-direction: null, $flex-wrap: null) {
     display: $display;
-    justify-content: $justify;
-    align-items: $align;
-    flex-direction: $direction;
-    flex-wrap: $wrap;
+    @if $justify-content != null {
+      justify-content: $justify-content;
+    }
+    @if $align-items != null {
+      align-items: $align-items;
+    }
+    @if $flex-direction != null {
+      flex-direction: $flex-direction;
+    }
+    @if $flex-wrap != null {
+      flex-wrap: $flex-wrap;
+    }
   }
   
   @mixin element-to-center {

@@ -17,7 +17,7 @@ export default function Button({
   type,
   id,
   disabled,
-  backdrop
+  backdrop,
 }: IButton): JSX.Element {
   return (
     <button

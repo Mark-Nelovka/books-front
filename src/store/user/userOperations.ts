@@ -10,21 +10,18 @@ const getCurrentUser = createAsyncThunk(
   "user/getUser",
   async (payload: string, thunkApi) => {
     try {
-      const { data } = await axios.get(
-        ``,
-        {
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-            "Bearer": `${payload}`
-          },
-        }
-      );
+      const { data } = await axios.get(``, {
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          Bearer: `${payload}`,
+        },
+      });
       console.log(data);
       return data;
     } catch (error) {
       return thunkApi.rejectWithValue(error);
     }
-  }
+  },
 );
 
 // const getCompletedTodos = createAsyncThunk(
@@ -126,6 +123,4 @@ const getCurrentUser = createAsyncThunk(
 
 // const updatePage = createAction<number>("todos/updatePage");
 
-export {
-    getCurrentUser,
-};
+export { getCurrentUser };

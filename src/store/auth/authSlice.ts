@@ -1,17 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import {
-    registrationUser
-} from "./authOperations";
+import { registrationUser } from "./authOperations";
 import { IAuthState, IPayloadActionAuthSuccess } from "./types";
 // import { IPayloadActionSuccess, ITodosState } from "./types";
 
 export const initialState: IAuthState = {
-userRegistrInfo: {
-    name: "",
-    lastName: "",
-    email: "",
-    token: null
-},
+  token: null,
   error: {
     status: null,
     message: "",
@@ -23,27 +16,20 @@ const AuthSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(registrationUser.pending, (state: IAuthState, _) => {
-
-    });
+    builder.addCase(registrationUser.pending, (state: IAuthState, _) => {});
     builder.addCase(
-        registrationUser.fulfilled,
+      registrationUser.fulfilled,
       (
         state: IAuthState,
-        { payload }: PayloadAction<IPayloadActionAuthSuccess>
-      ) => {
-
-      }
+        { payload }: PayloadAction<IPayloadActionAuthSuccess>,
+      ) => {},
     );
     builder.addCase(
-        registrationUser.rejected,
+      registrationUser.rejected,
       (state: IAuthState, { payload }: any) => {
         console.log(payload.response.data);
-
-      }
+      },
     );
-
-    
   },
 });
 

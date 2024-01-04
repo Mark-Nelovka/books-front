@@ -1,0 +1,137 @@
+.login_page-section {
+    background-color: inherit;
+    padding: 24px;
+}
+
+.login_page-title {
+    font-family: 'Helvetica Neue';
+font-size: 16px;
+font-style: normal;
+font-weight: 700;
+line-height: normal;
+color: #3E494A;
+text-align: center;
+}
+
+.login_welcome-image {
+    width: 160px;
+    height: 160px;
+    margin: 0 auto;
+    margin-bottom: 24px;
+    border-radius: 24px;
+    background-color: #EEF1F1;
+    padding: 42px 32px;
+}
+
+.login_welcome-image__container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.login_welcome-title {
+    color: #3E494A;
+text-align: center;
+font-family: 'Helvetica Neue';
+font-size: 16px;
+font-style: normal;
+font-weight: 500;
+line-height: normal;
+margin-top: 8px;
+}
+
+.login_welcome-text {
+    color: #383838;
+text-align: center;
+font-family: 'Helvetica Neue';
+font-size: 14px;
+font-style: normal;
+font-weight: 500;
+line-height: 24px;
+    margin-bottom: 48px;
+}
+
+.login_email-button-open-form {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    color: #FFF;
+    padding: 12px;
+text-align: center;
+font-family: 'Helvetica Neue';
+font-size: 16px;
+font-style: normal;
+font-weight: 500;
+line-height: normal;
+margin-bottom: 24px;
+    background: #3E494A;
+    & > p {
+        width: 100%;
+        margin-left: auto;
+    }
+}
+
+.button-social-login-page {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    color: #3E494A;
+    padding: 12px;
+text-align: center;
+font-family: 'Helvetica Neue';
+font-size: 16px;
+font-style: normal;
+font-weight: 500;
+line-height: normal;
+margin-bottom: 24px;
+    background: inherit;
+    border: 1px solid #B1BEBF;
+    & > p {
+        width: 100%;
+        margin-left: auto;
+    }
+}
+
+.login_form {
+    @include direction(flex, flex-start, flex-start, column, nowrap);
+    height: 75%;
+}
+
+.login_form-title {
+    color: #3E494A;
+text-align: center;
+font-family: 'Helvetica Neue';
+font-size: 16px;
+font-style: normal;
+font-weight: 700;
+line-height: normal;
+margin-bottom: 24px;
+}
+
+.login_form-title-field {
+    width: 100%;
+    padding: 8px 0px 8px 0px;
+    color: #3E494A;
+font-family: 'Helvetica Neue';
+font-size: 16px;
+font-style: normal;
+font-weight: 400;
+line-height: 24px; 
+border-bottom: 1px solid black;
+border-bottom-left-radius: 5px;
+border-bottom-right-radius: 5px;
+
+    &:not(:last-child) {
+        margin-bottom: 15px;
+    }
+}
+
+.login_form-button {
+    padding: 12px;
+    background-color: black;
+    text-align: center;
+    color: white;
+    width: 100%;
+    margin-top: 16px;
+    margin-bottom: 12px;
+}

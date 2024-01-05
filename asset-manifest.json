@@ -1,20 +1,28 @@
 {
   "files": {
-    "main.css": "/books-front/static/css/main.9fb7182e.css",
-    "main.js": "/books-front/static/js/main.ed718230.js",
+    "main.css": "/books-front/static/css/main.f1da3ebb.css",
+    "main.js": "/books-front/static/js/main.16044787.js",
     "static/js/787.5353f109.chunk.js": "/books-front/static/js/787.5353f109.chunk.js",
     "static/media/facebook-logo-icon.svg": "/books-front/static/media/facebook-logo-icon.a427e36de4651294faa0edd97c8d81c6.svg",
+    "index.html": "/books-front/index.html",
     "static/media/google-logo-icon.svg": "/books-front/static/media/google-logo-icon.99ef0f65b267bd259474fbe7bb4103c9.svg",
     "static/media/apple-logo-icon.svg": "/books-front/static/media/apple-logo-icon.99b411bfa1588033804c411d5089b670.svg",
-    "index.html": "/books-front/index.html",
+    "static/media/close-input-button.svg": "/books-front/static/media/close-input-button.51da0db2e50032df3c36f8f36f2bea43.svg",
+    "static/media/search-icon.svg": "/books-front/static/media/search-icon.07cc98c20357be1d810f48900c4a15e8.svg",
+    "static/media/user-icon.svg": "/books-front/static/media/user-icon.a027b30b0a01c903686b38d0e0976f85.svg",
+    "static/media/eye.svg": "/books-front/static/media/eye.7fdb852761005039d4a9e0e3f5fffcac.svg",
+    "static/media/nav-book-button.svg": "/books-front/static/media/nav-book-button.b21c7b4d1e04b29add795af0ae274891.svg",
     "static/media/email-icon.svg": "/books-front/static/media/email-icon.cd5ea8340ff601494f70971db78d1c09.svg",
+    "static/media/ring-notif-icon.svg": "/books-front/static/media/ring-notif-icon.ae74dacb5ae3d64ef2c87d1bad1f46c6.svg",
+    "static/media/nav-plus-icon.svg": "/books-front/static/media/nav-plus-icon.102bf639184264c95ae23ac646167a69.svg",
+    "static/media/arrow-left.svg": "/books-front/static/media/arrow-left.b759558caa1a867e5b84882de576ef1b.svg",
     "static/media/close-button.svg": "/books-front/static/media/close-button.86b5b96d30947c2abdaf2d7a4f52c990.svg",
-    "main.9fb7182e.css.map": "/books-front/static/css/main.9fb7182e.css.map",
-    "main.ed718230.js.map": "/books-front/static/js/main.ed718230.js.map",
+    "main.f1da3ebb.css.map": "/books-front/static/css/main.f1da3ebb.css.map",
+    "main.16044787.js.map": "/books-front/static/js/main.16044787.js.map",
     "787.5353f109.chunk.js.map": "/books-front/static/js/787.5353f109.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.9fb7182e.css",
-    "static/js/main.ed718230.js"
+    "static/css/main.f1da3ebb.css",
+    "static/js/main.16044787.js"
   ]
 }

@@ -1,44 +1,39 @@
 import axios from "axios";
 import { createAction, createAsyncThunk } from "@reduxjs/toolkit";
-import { IRegistrationInfoUser, ISignInInfoUser } from "./types";
+import { RootStore } from "store/store";
+import { SuccessPayloadFetchHomeBooks, TBook } from "./types";
+// import {
+//   IRegistrationInfoUser,
+// } from "./types";
 
 axios.defaults.baseURL = "https://p01--books--qqfgrnqblfk9.code.run";
 
-const registrationUser = createAsyncThunk(
-  "auth/registration",
-  async (payload: IRegistrationInfoUser, thunkApi) => {
-    console.log("payloadRegistration: ", payload);
-    try {
-      const { data } = await axios.post(`/api/auth/registration`, payload, {
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-        },
-      });
-      if (!data) throw data;
-      return data;
-    } catch (error) {
-      return thunkApi.rejectWithValue(error);
-    }
-  },
-);
+const fetchHomeBooks = createAsyncThunk<
+  SuccessPayloadFetchHomeBooks,
+  void,
+  { state: RootStore }
+>("books/getBooksForHome", async (_, thunkApi) => {
+  try {
+    const token = thunkApi.getState().auth.token;
 
-const signInUser = createAsyncThunk(
-  "auth/signIn",
-  async (payload: ISignInInfoUser, thunkApi) => {
-    console.log("payloadRegistration: ", payload);
-    try {
-      const { data } = await axios.post(`/api/auth/login`, payload, {
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-        },
-      });
-      if (!data) throw data;
-      return data;
-    } catch (error) {
-      return thunkApi.rejectWithValue(error);
-    }
-  },
-);
+    if (!token)
+      throw {
+        status: 401,
+        message: "Unauthorized",
+      };
+
+    const { data } = await axios.get(`/api/books/home`, {
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    console.log(data);
+    return data;
+  } catch (error) {
+    return thunkApi.rejectWithValue(error);
+  }
+});
 
 // const getCompletedTodos = createAsyncThunk(
 //   "todos/fetchCompletedTodos",
@@ -137,6 +132,6 @@ const signInUser = createAsyncThunk(
 //   }
 // );
 
-const resetError = createAction("auth/resetError");
+// const updatePage = createAction<number>("todos/updatePage");
 
-export { registrationUser, resetError, signInUser };
+export { fetchHomeBooks };

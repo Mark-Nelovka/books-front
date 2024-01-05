@@ -1,0 +1,27 @@
+footer {
+    position: relative;
+    @include direction(flex, space-between, flex-end, null, null);
+    background-color: $white;
+    z-index: 2;
+    position: fixed;
+    bottom: 0;
+    width: 100vw;
+    padding: 8px 15px;
+    border-top: 1.5px solid $gray-400;
+    & > div {
+        @include direction(flex, center, center, column, null);
+    }
+    & > div > p {
+margin-top: 10px;
+    }
+}
+
+.footer__nav-plus-icon_container {
+    position: absolute;
+    border-radius: 50%;
+    padding: 8px;
+    // z-index: 10;
+    top: -22px;
+    background-color: $accent;
+    // transform: translateY(-10px);
+}

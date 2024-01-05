@@ -1,0 +1,24 @@
+.category__categories-list {
+    position: relative;
+    overflow: scroll;
+    min-height: 100%;
+    width: 100%;
+    @include direction(flex, flex-start, flex-start, row, wrap);
+    margin-bottom: -20px;
+    margin-right: -15px;
+}
+
+.category__categories-list_item {
+    @include direction(flex, flex-start, center, column, null);
+    @include main-text(12px, 700, normal);
+    min-width: calc(100% / 2 - 15px); 
+    height: 105px;
+    padding: 18.5px 14px;
+    background-color: $gray-500;
+    margin-bottom: 20px;
+    margin-right: 15px;
+& > img {
+    width: 34px;
+    margin-bottom: 10px;
+}
+}

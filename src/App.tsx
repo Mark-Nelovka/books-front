@@ -5,6 +5,7 @@ import { Route, Routes } from "react-router-dom";
 import PrivateRoute from "routes/PrivateRoute";
 import PublickRoute from "routes/PublicRoute";
 import AuthPage from "pages/Auth/AuthPage";
+import CategoriesPage from "pages/CategoriesPage";
 
 // const ErrorPage = lazy(
 //   () => import("pages/ErrorPage" /* webpackChunkName: "Error page" */)
@@ -15,11 +16,10 @@ function App() {
   return (
     <>
       <main>
-        <div className="container">
           <Suspense fallback={<Loader />}>
             <Routes>
               <Route
-                path="/"
+                path="/books-front"
                 element={
                   <PublickRoute>
                     <AuthPage />
@@ -34,9 +34,24 @@ function App() {
                   </PrivateRoute>
                 }
               />
+              <Route
+                path="/categories"
+                element={
+                  <PrivateRoute>
+                    <CategoriesPage />
+                  </PrivateRoute>
+                }
+              />
+               <Route
+                path="/categories/:category"
+                element={
+                  <PrivateRoute>
+                    <CategoriesPage />
+                  </PrivateRoute>
+                }
+              />
             </Routes>
           </Suspense>
-        </div>
       </main>
     </>
   );

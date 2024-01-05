@@ -1,6 +1,10 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "store/hook";
-import { registrationUser, resetError, signInUser } from "store/auth/authOperations";
+import {
+  registrationUser,
+  resetError,
+  signInUser,
+} from "store/auth/authOperations";
 import Title from "components/Title/Title";
 import Button from "ui/Button/Button";
 import { Input } from "ui/FormFields/Fields";
@@ -31,37 +35,37 @@ export default function LoginForm({
   titleText,
   style,
   buttonText,
-  handleForm
+  handleForm,
 }: IPropsForm): JSX.Element {
   const [inputValue, setInputValue] = useState<ILoginFormState>({
     email: "",
     password: "",
   });
-  const errorState = useAppSelector(state => state.auth);
+  const errorState = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const showErrorMessage = useCallback(() => {
     console.log("callShowErrorMessage");
-  
+
     if (errorState.error.status) {
       Notiflix.Notify.warning(`${errorState.error.message}`);
-      dispatch(resetError())
+      dispatch(resetError());
     }
-  
+
     if (errorState.token) {
-      navigate('/home');
+      navigate("/home");
     }
-  }, [errorState.error.status, errorState.token]);
-  
+  }, [errorState.error, errorState.token]);
+
   useEffect(() => {
     showErrorMessage();
   }, [showErrorMessage]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(Object.values(inputValue).filter(el => el))
-    if(Object.values(inputValue).filter(el => el).length !== 2) return
+    console.log(Object.values(inputValue).filter((el) => el));
+    if (Object.values(inputValue).filter((el) => el).length !== 2) return;
     dispatch(signInUser(inputValue));
   };
 
@@ -98,7 +102,7 @@ export default function LoginForm({
           labelTitle="Password"
         />
       </form>
-      <hr style={{marginBottom: '16px'}} />
+      <hr style={{ marginBottom: "16px" }} />
       <div className="form__button-container">
         <Button
           id="form-submit-button"
@@ -109,10 +113,9 @@ export default function LoginForm({
           {buttonText}
         </Button>
       </div>
-      <p style={{ color: "blue", 
-      textAlign: "center",
-      marginTop: '12px'
-      }}>Forgot password?</p>
+      <p style={{ color: "blue", textAlign: "center", marginTop: "12px" }}>
+        Forgot password?
+      </p>
     </>
   );
 }

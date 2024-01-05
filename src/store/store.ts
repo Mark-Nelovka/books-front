@@ -13,6 +13,7 @@ import storage from "redux-persist/lib/storage";
 
 import authReducer from "./auth/authSlice";
 import userReducer from "./user/userSlice";
+import booksReducer from "./books/booksSlice";
 
 const AuthPersistConfig = {
   key: "auth",
@@ -24,12 +25,19 @@ const UserPersistConfig = {
   storage,
 };
 
+const BooksPersistConfig = {
+  key: "books",
+  storage,
+};
+
 const AuthPersistedReducer = persistReducer(AuthPersistConfig, authReducer);
 const UserPersistedReducer = persistReducer(UserPersistConfig, userReducer);
+const BooksPersistedReducer = persistReducer(BooksPersistConfig, booksReducer);
 
 const rootReducer = combineReducers({
   auth: AuthPersistedReducer,
   user: UserPersistedReducer,
+  books: BooksPersistedReducer,
 });
 
 const store = configureStore({
@@ -52,7 +60,7 @@ const store = configureStore({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
-    }),
+    }) as any,
   devTools: process.env.NODE_ENV === "development",
 });
 

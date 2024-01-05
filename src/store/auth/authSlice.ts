@@ -17,8 +17,7 @@ const AuthSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(registrationUser.pending, (state: IAuthState, _) => {
-      state.error.message = '',
-      state.error.status = null
+      (state.error.message = ""), (state.error.status = null);
     });
     builder.addCase(
       registrationUser.fulfilled,
@@ -39,8 +38,7 @@ const AuthSlice = createSlice({
     );
 
     builder.addCase(signInUser.pending, (state: IAuthState, _) => {
-      state.error.message = '',
-      state.error.status = null
+      (state.error.message = ""), (state.error.status = null);
     });
     builder.addCase(
       signInUser.fulfilled,
@@ -54,14 +52,14 @@ const AuthSlice = createSlice({
     builder.addCase(
       signInUser.rejected,
       (state: IAuthState, { payload }: any) => {
-        console.log("registrationUserRejected: ", payload.response.data);
-        state.error.status = payload.response.data.status;
+        console.log("SignInUserRejected: ", payload.response.data);
+        state.error.status = payload.response.data.statusCode;
         state.error.message = payload.response.data.message;
       },
     );
     builder.addCase(resetError, (state, _) => {
       state.error.status = null;
-      state.error.message = ""
+      state.error.message = "";
     });
   },
 });

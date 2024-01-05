@@ -1,0 +1,125 @@
+.home__header {
+    @include direction(flex, center, center, null, null);
+    margin-bottom: 8px;
+}
+
+
+.home__title {
+    @include main-text(16px, 700);
+    font-style: normal;
+    text-align: center;
+    width: 100%;
+}
+// CATEGORIES
+.home__categories {
+    @include direction(flex, space-between, center, null, null);
+    padding: 12px 0px;
+    margin-bottom: 8px;
+    & > a {
+        color: $blue-link;
+    }
+}
+
+.home__categories-list {
+    position: relative;
+    overflow: scroll;
+    height: 80px;
+    width: inherit;
+    @include direction(flex, flex-start, center, null, null);
+    margin-bottom: 24px;
+}
+
+.home__categories-list_item {
+    @include direction(flex, center, center, column, null);
+    @include main-text(12px, 700, normal);
+    min-width: 80px; 
+    max-width: 80px;
+    height: 80px;
+    padding: 18.5px 14px;
+    background-color: $gray-500;
+&:not(:last-child) {
+    margin-right: 15px;
+}
+& > img {
+    width: 24px;
+    margin-bottom: 8px;
+}
+}
+
+// ALL BOOKS
+
+.home__books-list {
+    position: relative;
+    overflow: scroll;
+    @include direction(flex, flex-start, flex-start, null, null);
+    margin-bottom: 24px;
+    min-height: 225px;
+}
+
+.home__books-list_item {
+    @include direction(flex, space-between, flex-start, column, null);
+    min-height: 221px;
+    &:not(:last-child) {
+        margin-right: 15px;
+    }
+}
+
+.home__book-list_image-container {
+    width: 125px;
+    position: relative;
+    & > img {
+        width: 100%;
+        height: 150px;
+        object-fit: cover;
+    }
+    &::after {
+        content: attr(data-price);
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: 18px;
+        background-color: rgba(255, 255, 255, 0.80);
+        backdrop-filter: blur(4px);
+    }
+}
+
+.home__book-list-recently_image-decoration {
+    @include main-text(9px, 700);
+    position: absolute;
+    top: 0;
+    min-width: 40%;
+    max-height: 18px;
+    padding: 2px 5px;
+font-style: normal;
+    background-color: $white;
+}
+
+.home__book-list-popular_image-decoration {
+    @include main-text(9px, 700);
+    position: absolute;
+    display: flex;
+    align-items: center;
+    top: 0;
+    min-width: 10%;
+    max-height: 18px;
+    padding: 2px 4px;
+    background-color: $white;
+    & > img {
+        margin-right: 3px;
+    }
+}
+
+.home__book-list_item-title {
+    @include main-text(12px, 400, normal);
+font-style: normal;
+margin-bottom: 8px;
+margin-top: 12px;
+}
+
+.home__book-list_item-category {
+    padding: 4px 8px;
+    @include main-text(11px, 400, normal);
+font-style: normal;
+    border-radius: 12px;
+    background-color: $gray-400;
+}

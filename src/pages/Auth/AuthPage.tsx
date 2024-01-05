@@ -14,7 +14,7 @@ export default function AuthPage(): JSX.Element {
   const [choosedForm, setchoosedForm] = useState("");
 
   const handleForm = () => {
-    setchoosedForm('email')
+    setchoosedForm("email");
   };
 
   const toggleBackdrop = (event: React.MouseEvent | React.KeyboardEvent) => {
@@ -94,7 +94,6 @@ export default function AuthPage(): JSX.Element {
             buttonText="Register"
             style="register_form"
             handleForm={handleForm}
-
           />
         </Modal>
       )}

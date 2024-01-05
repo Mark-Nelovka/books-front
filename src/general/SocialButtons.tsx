@@ -9,7 +9,7 @@ export default function SocialButtons() {
 
   return (
     <>
-      <hr style={{ marginBottom: "24px", marginTop: '24px' }} />
+      <hr style={{ marginBottom: "24px", marginTop: "24px" }} />
       <Button
         id="button-apple-login-page"
         type="button"

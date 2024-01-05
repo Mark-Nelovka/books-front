@@ -45,33 +45,33 @@ export default function RegistrationForm({
     lastName: "",
   });
   const [policy, setPolicy] = useState<boolean>(false);
-  const errorState = useAppSelector(state => state.auth);
+  const errorState = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const showErrorMessage = useCallback(() => {
     console.log("callShowErrorMessage");
-  
+
     if (errorState.error.status) {
       Notiflix.Notify.warning(`${errorState.error.message}`);
-      dispatch(resetError())
+      dispatch(resetError());
     }
-  
+
     if (errorState.token) {
-      navigate('/home');
+      navigate("/home");
     }
   }, [errorState.error.status, errorState.token]);
-  
+
   useEffect(() => {
     showErrorMessage();
   }, [showErrorMessage]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(Object.values(inputValue).filter(el => el))
-    if(Object.values(inputValue).filter(el => el).length !== 4 || !policy) return
+    console.log(Object.values(inputValue).filter((el) => el));
+    if (Object.values(inputValue).filter((el) => el).length !== 4 || !policy)
+      return;
     dispatch(registrationUser(inputValue));
-
   };
 
   const handleChangeInputValue = (event: React.ChangeEvent) => {
@@ -130,7 +130,7 @@ export default function RegistrationForm({
         />
       </form>
       <div className="reg_policy-container" onClick={() => setPolicy(!policy)}>
-        <input id='policy' type="checkbox" checked={policy} />
+        <input id="policy" type="checkbox" checked={policy} />
         <label htmlFor="policy">I agree to Terms of Use & Privacy Policy</label>
       </div>
       <div className="form__button-container">
@@ -146,18 +146,18 @@ export default function RegistrationForm({
       </div>
       <SocialButtons />
       <p style={{ textAlign: "center", marginBottom: "8px" }}>
-      Already have an account?
-          </p>
-          <p
-            onClick={() => handleForm("login")}
-            style={{
-              textAlign: "center",
-              textDecoration: "underline",
-              color: "blue",
-            }}
-          >
-            Login
-          </p>
+        Already have an account?
+      </p>
+      <p
+        onClick={() => handleForm("login")}
+        style={{
+          textAlign: "center",
+          textDecoration: "underline",
+          color: "blue",
+        }}
+      >
+        Login
+      </p>
     </>
   );
 }

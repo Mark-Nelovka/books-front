@@ -22,6 +22,7 @@ export type TBook = {
 export interface IBooksState {
   categories: [{ name: string; count: number; image: string }];
   allBooks: booksForPages;
+  categoryBook: booksForPages;
   recentlyAdded: booksForPages;
   mostViewed: booksForPages;
   error: {
@@ -33,7 +34,7 @@ export interface IBooksState {
 export interface booksForPages {
   books: TBook[];
   info: {
-    currentPage?: string;
+    currentPage: string;
     nextPage?: string;
   };
 }
@@ -45,4 +46,18 @@ export interface SuccessPayloadFetchHomeBooks {
     recentlyAdded: booksForPages;
     mostViewed: booksForPages;
   };
+}
+
+export interface SuccessPayloadSearchBook {
+  data: {
+    searchResult: Partial<TBook>[]
+  };
+}
+
+export interface SuccessPayloadGetSearchedBook extends Omit<booksForPages, 'info'> {
+  books: TBook[]
+}
+
+export interface SuccessPayloadGetBookByCategory {
+  data: booksForPages
 }

@@ -1,0 +1,120 @@
+.home__books-list[data-page-type="home"] {
+    width: 100%;
+    position: relative;
+    overflow: scroll;
+    @include direction(flex, flex-start, flex-start, null, null);
+    margin-bottom: 24px;
+    min-height: 225px;
+}
+
+.home__books-list_item[data-page-type="home"] {
+    @include direction(flex, space-between, flex-start, column, null);
+    min-height: 221px;
+    width: calc(100% / 2 - 10px);
+    &:not(:last-child) {
+        margin-right: 15px;
+    }
+}
+
+.home__books-list:not([data-page-type="home"]) {
+    position: relative;
+    overflow: scroll;
+    @include direction(flex, flex-start, flex-start, row, wrap);
+    margin-bottom: -20px;
+    min-height: 225px;
+    margin-right: -15px;
+    
+}
+
+.home__books-list_item:not([data-page-type="home"]) {
+    @include direction(flex, flex-start, flex-start, column, null);
+    width: calc(100% / 2 - 15px);
+    min-width: 125px;
+    max-width: 250px;
+    min-height: 221px;
+    margin-right: 15px;
+    margin-bottom: 20px;
+}
+
+.home__book-list_image-container {
+    width: 100%;
+    position: relative;
+    & > img {
+        min-width: 125px;
+        max-height: 250px;
+        object-fit: cover;
+        margin: 0 auto;
+    }
+    &::after {
+        content: attr(data-price);
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: 18px;
+        background-color: rgba(255, 255, 255, 0.80);
+        backdrop-filter: blur(4px);
+    }
+}
+
+.home__book-list_item-title {
+    @include main-text(12px, 400, normal);
+font-style: normal;
+margin-bottom: 8px;
+margin-top: 12px;
+}
+
+.home__book-list_item-category {
+    padding: 4px 8px;
+    @include main-text(11px, 400, normal);
+font-style: normal;
+    border-radius: 12px;
+    background-color: $gray-400;
+}
+
+.eye-decoration[data-page-type="home"] {
+    @include main-text(9px, 700);
+    position: absolute;
+    display: flex;
+    align-items: center;
+    top: 0;
+    min-width: 10%;
+    max-height: 18px;
+    padding: 2px 4px;
+    background-color: $white;
+    & > img {
+        margin-right: 3px;
+    }
+}
+
+.eye-decoration:not([data-page-type="home"]) {
+    @include main-text(15px, 700);
+    position: absolute;
+    display: flex;
+    align-items: center;
+    top: 0;
+    padding: 2px 4px;
+    background-color: $white;
+    & > img {
+        margin-right: 3px;
+    }
+}
+
+.timestemp-decoration[data-page-type="home"] {
+    @include main-text(10px, 700);
+    position: absolute;
+    top: 0;
+    padding: 2px 5px;
+font-style: normal;
+    background-color: $white;
+}
+
+.timestemp-decoration:not([data-page-type="home"]) {
+    @include main-text(15px, 700);
+    position: absolute;
+    text-align: center;
+    top: 0;
+    // max-height: 18px;
+    padding: 2px 5px;
+font-style: normal;
+    background-color: $white;
+}

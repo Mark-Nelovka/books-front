@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { getCurrentUser } from "./userOperations";
-import { IUserState } from "./types";
+import { getCurrentUser, addToBasket } from "./userOperations";
+import { IPayloadAddToBasketSuccess, IUserState } from "./types";
 // import { IAuthState, IPayloadActionAuthSuccess } from "./types";
 // import { IPayloadActionSuccess, ITodosState } from "./types";
 
@@ -29,22 +29,24 @@ const UserSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    // builder.addCase(registrationUser.pending, (state: IAuthState, _) => {
-    // });
-    // builder.addCase(
-    //     registrationUser.fulfilled,
-    //   (
-    //     state: IAuthState,
-    //     { payload }: PayloadAction<IPayloadActionAuthSuccess>
-    //   ) => {
-    //   }
-    // );
-    // builder.addCase(
-    //     registrationUser.rejected,
-    //   (state: IAuthState, { payload }: any) => {
-    //     console.log(payload.response.data);
-    //   }
-    // );
+    builder.addCase(
+      addToBasket.fulfilled,
+      (
+        state: IUserState,
+        { payload }: PayloadAction<IPayloadAddToBasketSuccess>
+      ) => {
+        state.user.basket = state.user.basket += 1;
+        state.error.status = null;
+        state.error.message = "";
+      }
+    );
+    builder.addCase(
+      addToBasket.rejected,
+      (state: IUserState, { payload }: any) => {
+        state.error.status = payload.response.data.status;
+        state.error.message = payload.response.data.message;
+      }
+    );
   },
 });
 

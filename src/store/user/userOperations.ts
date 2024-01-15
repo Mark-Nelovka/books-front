@@ -1,10 +1,12 @@
 import axios from "axios";
 import { createAction, createAsyncThunk } from "@reduxjs/toolkit";
+import { TBook } from "store/books/types";
+import { IPayloadAddToBasket } from "./types";
 // import {
 //   IRegistrationInfoUser,
 // } from "./types";
 
-axios.defaults.baseURL = "https://p01--books--qqfgrnqblfk9.code.run/api/user";
+// axios.defaults.baseURL = "https://p01--books--qqfgrnqblfk9.code.run/";
 
 const getCurrentUser = createAsyncThunk(
   "user/getUser",
@@ -14,6 +16,25 @@ const getCurrentUser = createAsyncThunk(
         headers: {
           "Access-Control-Allow-Origin": "*",
           Bearer: `${payload}`,
+        },
+      });
+      console.log(data);
+      return data;
+    } catch (error) {
+      return thunkApi.rejectWithValue(error);
+    }
+  },
+);
+
+const addToBasket = createAsyncThunk(
+  "user/addToBasket",
+  async (payload: IPayloadAddToBasket, thunkApi) => {
+    
+    try {
+      const { data } = await axios.post(`/api/user/basket`, payload.book, {
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          Authorization: `Bearer ${payload.token}`,
         },
       });
       console.log(data);
@@ -123,4 +144,4 @@ const getCurrentUser = createAsyncThunk(
 
 // const updatePage = createAction<number>("todos/updatePage");
 
-export { getCurrentUser };
+export { getCurrentUser, addToBasket };

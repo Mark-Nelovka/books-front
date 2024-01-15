@@ -12,7 +12,7 @@ export default function ModalComponent({
   toggleFunc,
 }: IModalProps): JSX.Element {
   return (
-    <div className="modal">
+    <div className="modal-my">
       <Button
         id="modal-close-button"
         func={toggleFunc}

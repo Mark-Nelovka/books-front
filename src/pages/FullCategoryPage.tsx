@@ -6,8 +6,9 @@ import { useAppSelector } from 'store/hook'
 import BackPageIcon from 'assets/icons/arrow-left.svg';
 import Button from 'ui/Button/Button';
 import { Link } from 'react-router-dom';
+import { EPages } from 'components/BookList/BookList';
 
-export default function CategoriesPage() {
+export default function FullCategoryPage() {
     const categories = useAppSelector(state => state.books.categories);
   return (
     <>
@@ -22,7 +23,7 @@ export default function CategoriesPage() {
           Categories
         </Title>
       </Header>
-      <CategoryList items={categories} page='category' />
+      <CategoryList items={categories} page={EPages.category} />
       </div>
     </>
   )

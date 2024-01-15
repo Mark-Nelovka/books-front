@@ -12,7 +12,7 @@
     @include direction(flex, flex-start, center, column, null);
     @include main-text(12px, 700, normal);
     min-width: calc(100% / 2 - 15px); 
-    height: 105px;
+    height: 100px;
     padding: 18.5px 14px;
     background-color: $gray-500;
     margin-bottom: 20px;
@@ -21,4 +21,8 @@
     width: 34px;
     margin-bottom: 10px;
 }
+}
+
+.button-back-page {
+    @include direction(flex, center, center, null, null);
 }

@@ -45,6 +45,22 @@
     background-color: $white;
 }
 
+
+.search-form__list-title_container {
+    @include direction(flex, space-between, center, null, null);
+    padding: 12px 15px;
+    margin-bottom: 8px;
+    margin-top: 18px;
+    & > button > a {
+        color: $blue-link
+    }
+}
+
+.search-form__list-title {
+    @include main-text(16px, 700);
+    font-style: normal;
+}
+
 .search-from__list {
     position: relative;
     height: 30%;
@@ -61,8 +77,9 @@
 
 .search-from__list-item--light {
     @include main-text(14px, 400, 24px, $gray-200);
+    @include direction(flex, space-between, center, null, null);
 font-style: normal;
-    & > span {
+    & > a > span {
         @include main-text(14px, 400, 24px, $gray-100);
     }
     &:not(:last-child) {
@@ -75,32 +92,17 @@ font-style: normal;
 font-style: normal;
 opacity: 0;
 width: 0px;
-padding: 5px;
 overflow: hidden;
-margin-left: 9px;
 text-decoration: underline;
     transition: all .5s linear;
     &.active {
+        padding: 5px;
+        margin-left: 9px;
         opacity: 1;
         overflow: visible;
         width: 50px;
         transition: all .5s linear;
     }
-}
-
-.search-form__list-title_container {
-    @include direction(flex, space-between, center, null, null);
-    padding: 12px 15px;
-    margin-bottom: 8px;
-    margin-top: 18px;
-    & > a {
-        color: $blue-link
-    }
-}
-
-.search-form__list-title {
-    @include main-text(16px, 700);
-    font-style: normal;
 }
 
 .search-form__button-remove-histiry {

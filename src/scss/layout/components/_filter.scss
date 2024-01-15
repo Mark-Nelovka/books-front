@@ -1,0 +1,186 @@
+.filter__section {
+    @include direction(flex, space-around, center, null, null);
+    width: 80%;
+    margin: 24px auto;
+
+}
+
+.filter__button {
+    @include main-text(16px, 700, normal, $gray-200);
+    @include direction(flex, center, center, null, null);
+font-style: normal;
+& > span {
+    margin-right: 8px;
+}
+}
+
+.backdrop-filter {
+    position: absolute;
+    &.active {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 5;
+        background-color: rgb(0,0,0, .3);
+    }
+}
+
+.filter-bar {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    width: 100vw;
+    height: 0px;
+    z-index: 5;
+    transition: all .2s linear;
+    overflow: hidden;
+    background-color: $white;
+    &.active {
+        position: fixed;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        z-index: 1;
+        overflow: hidden;
+        padding: 24px;
+        width: 100vw;
+        height: calc(100% - 70px);
+        max-width: 650px;
+        background-color: $white;
+        border-radius: 20px 20px 0px 0px;
+        transition: all .2s linear;
+    }
+}
+
+.filter__container {
+    width: 100%;
+    height: 80%;
+    & > div {
+        position: relative;
+        @include main-text(16px, 500);
+        font-style: normal;
+        @include direction(flex, space-between, center, null, null);
+        padding: 12px 0px;
+        &:not(:last-child) {
+            margin-bottom: 12px;
+        }
+    }
+}
+
+.filter__toggle-button {
+    width: 44px;
+    height: 24px;
+    border-radius: 20px;
+    background-color: $gray-200;
+    padding: 4px;
+    @include direction(flex, flex-start, center, null, null);
+    &.active {
+        background-color: $accent;
+        & .filter__toggle-element {
+            transition: all .2s linear;
+            transform: translateX(20px);
+        }
+    }
+    & .filter__toggle-element {
+        transition: all .2s linear;
+        width: 17px;
+        height: 17px;
+        border-radius: 20px;
+        background-color: $white;
+    }
+}
+
+.filter__list-toggle {
+    transform: rotate(-90deg);
+    transition: all 0.3s linear;
+    &.active {
+        transition: all 0.3s linear;
+        transform: rotate(90deg);
+    }
+    & > img {
+        padding: 5px;
+    }
+}
+
+.filter__category-list {
+    position: absolute;
+    bottom: 0;
+    overflow: hidden;
+    overflow-y: scroll;
+    height: 0px;
+    width: 100vw;
+    z-index: 1;
+    transform: scaleY(-1);
+    transform-origin: bottom;
+    transition: all .3s linear;
+    background-color: $white;
+    &.active {
+        height: 200px;
+        // max-height: 200px;
+        transition: height .3s linear;
+    }
+}
+
+.filter__category-list-item {
+    @include main-text(16px, 500, normal, $gray-200);
+    padding: 10px 0px;
+    transform: scaleY(-1);
+    border-bottom: 1px solid $gray-400;
+    &:not(:last-child) {
+        margin-bottom: 5px;
+    }
+    &.active {
+    color: $gray-100;
+    }
+}
+
+.filter__range-list {
+    @include direction(flex, space-between, center, null, null);
+    position: absolute;
+    bottom: 0;
+    overflow: hidden;
+    height: 0px;
+    width: 100%;
+    z-index: 1;
+    transform: scaleY(-1);
+    transform-origin: bottom;
+    transition: all .3s linear;
+    background-color: $white;
+    &.active {
+        height: 50px;
+        transition: height .3s linear;
+    }
+    & > div {
+        border-radius: 20px;
+        width: calc(100% / 2 - 14px);
+        padding: 12px;
+        background-color: $gray-400;
+            transform: scaleY(-1);
+        &:not(:last-child) {
+            margin-right: 14px;
+        }
+        & > input {
+            width: 100%;
+            background-color: inherit
+        }
+    }
+} 
+
+.filter__submit-button {
+    @include main-text(16px, 500, normal, $white);
+font-style: normal;
+    background-color: $gray-100;
+    text-align: center;
+    width: 100%;
+    padding: 12px;
+}
+
+.filter__reset-button {
+    @include main-text(16px, 500, normal, $gray-200);
+font-style: normal;
+letter-spacing: 1.1px;
+text-decoration: underline;
+}

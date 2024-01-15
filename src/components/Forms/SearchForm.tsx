@@ -6,29 +6,11 @@ import CancelIcon from "assets/icons/close-input-button.svg";
 import { Loader } from "ui/Loader/Loader";
 import { Link } from "react-router-dom";
 import Title from "components/Title/Title";
-
-const tempBookTitle = [
-  "Book 1",
-  "Book 2",
-  "Book 3",
-  "Book 4",
-  "Book 5",
-  "Book 6",
-  "Book 7",
-  "Book 8",
-];
-const tempHistory = [
-  "Book 11",
-  "Book 12",
-  "Book 13",
-  "Book 14",
-  "Book 15",
-  "Book 16",
-  "Book 17",
-  "Book 18",
-];
-const tempBookTitleEmpty = [];
-const tempHistoryEmpty = [];
+import { useAppDispatch, useAppSelector } from "store/hook";
+import Notiflix from "notiflix";
+import { resetError } from "store/auth/authOperations";
+import SearchBooksApi from "API/searchBooks";
+import { TBook } from "store/books/types";
 
 const Hightlight = (props: any) => {
   const { filter, str } = props;
@@ -59,30 +41,44 @@ export default function SearchForm({
   checkSearch: (bol: boolean) => void;
 }): JSX.Element {
   const [searchValue, setSearchValue] = useState("");
+  const [searchResults, setSearchResults] = useState<Partial<TBook>[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const token = useAppSelector(state => state.auth.token);
+  const historyUser: string[] = useAppSelector(state => state.user.user.historySearches);
+
+  const dispatch = useAppDispatch();
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     console.log("searchValue: ", searchValue);
   };
 
-  useEffect(() => {
-    console.log(tempBookTitle[0].split(/\s+/));
-  }, []);
+  const qwe = async (value: string) => {
+    try {
+      const data = await SearchBooksApi(value, token!);
+      if(!data.data) throw data;
+      setSearchResults(data.data.searchResult)
+    } catch (error) {
+      console.log("errorQWE");
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
-  const throttleFunc = useMemo(
-    () =>
-      throttle(1000, (value: string) => {
-        console.log(value);
-      }),
-    [],
+  const throttleFunc = useCallback(
+    throttle(1000, async (value: string) => {
+      qwe(value)
+    }),
+    [dispatch]
   );
 
-  const handleSearchValue = (event: React.ChangeEvent) => {
+  const handleSearchValue = async (event: React.ChangeEvent) => {
     const { value } = event.target as HTMLInputElement;
     setSearchValue(value);
     if (value) {
+      setIsLoading(true);
       checkSearch(true);
-      throttleFunc(value);
+      // throttleFunc(value)
       return;
     }
     checkSearch(false);
@@ -128,22 +124,30 @@ export default function SearchForm({
               <Title style="search-form__list-title" h={4}>
                 Books
               </Title>
-              <Link to={"/categories"} state={[]}>
+              <Button type="button" style="" id='search-result-button-all'>
+              <Link to={`/search?${searchResults.map((el) => `id=${el.id}`).join('&')}`} state={[]}>
                 See all
               </Link>
+              </Button>
             </div>
           <ul className="search-from__list">
-            {/* {tempBookTitle.length > 0 &&
-              tempBookTitle.map((title, inx) => {
+            {searchResults.length > 0 && !isLoading && 
+              searchResults.map((title, inx) => {
                 return (
                   <>
                     <li className="search-from__list-item--light" key={inx}>
-                      {light(title)}
+                      <Link to={`/search?id=${title.id}`}>
+                      <span>{light(title.title!)}</span>
+                      <span>{light(title.author!)}</span>
+                      </Link>
                     </li>
                   </>
                 );
-              })} */}
-            {tempBookTitleEmpty.length === 0 && <Loader size='25px' />}
+              })}
+              {searchResults.length === 0 && !isLoading && <Title style="" h={2}>
+                No matches
+                </Title>}
+            {isLoading && <Loader size='25px' />}
           </ul>
           <hr />
           <div className="search-form__list-title_container">
@@ -159,8 +163,8 @@ export default function SearchForm({
               </Button>
             </div>
           <ul className="search-from__list">
-            {/* {tempHistory.length > 0 &&
-              tempHistory.map((title, inx) => {
+            {historyUser.length > 0 &&
+              historyUser.map((title, inx) => {
                 return (
                   <>
                     <li className="search-from__list-item" key={inx}>
@@ -168,8 +172,8 @@ export default function SearchForm({
                     </li>
                   </>
                 );
-              })} */}
-            {tempHistoryEmpty.length === 0 && <Loader size='25px' />}
+              })}
+            {historyUser.length === 0 && <Loader size='25px' />}
           </ul>
         </div>
       )}

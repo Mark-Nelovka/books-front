@@ -1,0 +1,95 @@
+.basket__title {
+    @include main-text(16px, 700);
+font-style: normal;
+margin-bottom: 30px;
+text-align: center;
+}
+
+.basket__list {
+    // @include direction(flex, flex-start, flex-start, column, null);
+    overflow-y: scroll;
+    height: 55vh;
+    margin-bottom: auto;
+}
+
+.basket__list-item {
+    @include direction(flex, flex-start, flex-start, null, null);
+    padding-top: 12px;
+    padding-bottom: 24px;
+    &:not(:last-child) {
+        border-bottom: 1px solid $gray-400;
+        margin-bottom: 24px;
+    }
+}
+.basket__list_image-container {
+    margin-right: 12px;
+    & > img {
+        height: 80px;
+        width: 80px;
+        object-fit: cover;
+    }
+}
+
+.basket__list_content-container {
+    font-style: normal;
+    margin-right: auto;
+    &>p:first-child{
+        @include main-text(14px, 700, 24px);
+    }
+    &>p:nth-child(2){
+        @include main-text(12px, 400, normal, $gray-200);
+        margin-top: 4px;
+        margin-bottom: 12px;
+    }
+    &>p:last-child{
+        @include main-text(16px, 700);
+    }
+}
+
+.basket__delete-button {
+    padding: 5px;
+}
+
+.basket__footer {
+    padding: 24px 24px 24px 24px;
+    background-color: $gray-400;
+    height: 100vh;
+    &>div:first-child {
+        padding-bottom: 12px;
+    }
+}
+
+.basket__footer-text {
+    font-style: normal;
+    &:first-child {
+        margin-bottom: 8px;
+    }
+    &>span:first-child {
+        @include main-text(12px, 700);
+        display: inline-block;
+        width: 50%;
+    }
+    &>span:last-child {
+        @include main-text(12px, 400);
+    }
+}
+
+.basket__footer_total-container {
+padding-top: 12px;
+margin-bottom: 24px;
+border-top: 1px solid $black;
+@include main-text(12px, 700);
+    &>span:first-child {
+        display: inline-block;
+        width: 50%;
+    }
+}
+
+.basket__footer_button {
+    @include main-text(16px, 500, normal, $white);
+text-align: center;
+font-style: normal;
+padding: 12px;
+background-color: $gray-100;
+width: 100%;
+}

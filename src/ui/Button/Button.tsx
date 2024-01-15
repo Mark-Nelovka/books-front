@@ -8,6 +8,7 @@ interface IButton {
   id: string;
   disabled?: boolean;
   backdrop?: boolean;
+  basketCount?: number;
 }
 
 export default function Button({
@@ -18,6 +19,7 @@ export default function Button({
   id,
   disabled,
   backdrop,
+  basketCount
 }: IButton): JSX.Element {
   return (
     <button
@@ -27,6 +29,7 @@ export default function Button({
       type={type}
       disabled={disabled}
       className={style}
+      data-basket-count={basketCount}
     >
       {children}
     </button>

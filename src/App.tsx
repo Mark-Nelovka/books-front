@@ -1,15 +1,30 @@
 import { Loader } from "ui/Loader/Loader";
 import HomePage from "pages/Home/HomePage";
-import React, { Suspense } from "react";
+import React, { Suspense, lazy } from "react";
 import { Route, Routes } from "react-router-dom";
 import PrivateRoute from "routes/PrivateRoute";
 import PublickRoute from "routes/PublicRoute";
 import AuthPage from "pages/Auth/AuthPage";
-import CategoriesPage from "pages/CategoriesPage";
 
-// const ErrorPage = lazy(
-//   () => import("pages/ErrorPage" /* webpackChunkName: "Error page" */)
-// );
+const SearchPage = lazy(
+  () => import("pages/SearchPage" /* webpackChunkName: "SearchPage" */)
+);
+
+const FullCategoryPage = lazy(
+  () => import("pages/FullCategoryPage" /* webpackChunkName: "FullCategoryPage" */)
+);
+
+const BooksListPage = lazy(
+  () => import("pages/BooksListPage" /* webpackChunkName: "BooksListPage" */)
+);
+
+const DetailsPage = lazy(
+  () => import("pages/DetailsPage" /* webpackChunkName: "DetailsPage" */)
+);
+
+const BasketPage = lazy(
+  () => import("pages/BasketPage" /* webpackChunkName: "BasketPage" */)
+);
 
 function App() {
   console.log("Appasdfsafs");
@@ -19,7 +34,7 @@ function App() {
           <Suspense fallback={<Loader />}>
             <Routes>
               <Route
-                path="/books-front"
+                path="/"
                 element={
                   <PublickRoute>
                     <AuthPage />
@@ -38,15 +53,39 @@ function App() {
                 path="/categories"
                 element={
                   <PrivateRoute>
-                    <CategoriesPage />
+                    <FullCategoryPage />
                   </PrivateRoute>
                 }
               />
                <Route
-                path="/categories/:category"
+                path="/books/:page/*"
                 element={
                   <PrivateRoute>
-                    <CategoriesPage />
+                    <BooksListPage />
+                  </PrivateRoute>
+                }
+              />
+               <Route
+                path="/book/:bookId"
+                element={
+                  <PrivateRoute>
+                    <DetailsPage />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/user/basket"
+                element={
+                  <PrivateRoute>
+                    <BasketPage />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/search"
+                element={
+                  <PrivateRoute>
+                    <SearchPage />
                   </PrivateRoute>
                 }
               />

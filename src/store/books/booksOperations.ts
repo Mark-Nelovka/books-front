@@ -1,12 +1,12 @@
 import axios from "axios";
 import { createAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { RootStore } from "store/store";
-import { SuccessPayloadFetchHomeBooks, TBook } from "./types";
+import { SuccessPayloadFetchHomeBooks, SuccessPayloadGetBookByCategory, SuccessPayloadGetSearchedBook, SuccessPayloadSearchBook, TBook, booksForPages } from "./types";
 // import {
 //   IRegistrationInfoUser,
 // } from "./types";
 
-axios.defaults.baseURL = "https://p01--books--qqfgrnqblfk9.code.run";
+axios.defaults.baseURL = "http://localhost:8080";
 
 const fetchHomeBooks = createAsyncThunk<
   SuccessPayloadFetchHomeBooks,
@@ -21,19 +21,134 @@ const fetchHomeBooks = createAsyncThunk<
         status: 401,
         message: "Unauthorized",
       };
-
+    
     const { data } = await axios.get(`/api/books/home`, {
       headers: {
         "Access-Control-Allow-Origin": "*",
         Authorization: `Bearer ${token}`,
       },
     });
+    if(!data.data) throw data
     console.log(data);
     return data;
   } catch (error) {
     return thunkApi.rejectWithValue(error);
   }
 });
+
+const fetchBookByCategory = createAsyncThunk<
+SuccessPayloadGetBookByCategory,
+  string,
+  { state: RootStore }
+>("books/fetchBookByCategory", async (param: string, thunkApi) => {
+  try {
+    const token = thunkApi.getState().auth.token;
+
+    if (!token)
+      throw {
+        status: 401,
+        message: "Unauthorized",
+      };
+    
+    const { data } = await axios.get(`/api/books${param}`, {
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if(!data.data) throw data
+    // console.log("fetchBookByCategory: ", data);
+    return data;
+  } catch (error) {
+    return thunkApi.rejectWithValue(error);
+  }
+});
+
+const fetchAllBooks = createAsyncThunk<
+SuccessPayloadGetBookByCategory,
+  string,
+  { state: RootStore }
+>("books/fetchAllBooks", async (param: string, thunkApi) => {
+  try {
+    const token = thunkApi.getState().auth.token;
+
+    if (!token)
+      throw {
+        status: 401,
+        message: "Unauthorized",
+      };
+    
+    const { data } = await axios.get(`/api/books${param}`, {
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if(!data.data) throw data
+    console.log("fetchBookByCategory: ", data);
+    return data;
+  } catch (error) {
+    return thunkApi.rejectWithValue(error);
+  }
+});
+
+const fetchRecentlyBooks = createAsyncThunk<
+SuccessPayloadGetBookByCategory,
+  string,
+  { state: RootStore }
+>("books/fetchRecentlyBooks", async (param: string, thunkApi) => {
+  try {
+    const token = thunkApi.getState().auth.token;
+
+    if (!token)
+      throw {
+        status: 401,
+        message: "Unauthorized",
+      };
+    
+    const { data } = await axios.get(`/api/books${param}`, {
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if(!data.data) throw data
+    console.log("fetchBookByCategory: ", data);
+    return data;
+  } catch (error) {
+    return thunkApi.rejectWithValue(error);
+  }
+});
+
+const fetchPopularBooks = createAsyncThunk<
+SuccessPayloadGetBookByCategory,
+  string,
+  { state: RootStore }
+>("books/fetchPopularBooks", async (param: string, thunkApi) => {
+  try {
+    const token = thunkApi.getState().auth.token;
+
+    if (!token)
+      throw {
+        status: 401,
+        message: "Unauthorized",
+      };
+    
+    const { data } = await axios.get(`/api/books${param}`, {
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if(!data.data) throw data
+    console.log("fetchBookByCategory: ", data);
+    return data;
+  } catch (error) {
+    return thunkApi.rejectWithValue(error);
+  }
+});
+
+
 
 // const getCompletedTodos = createAsyncThunk(
 //   "todos/fetchCompletedTodos",
@@ -134,4 +249,4 @@ const fetchHomeBooks = createAsyncThunk<
 
 // const updatePage = createAction<number>("todos/updatePage");
 
-export { fetchHomeBooks };
+export { fetchHomeBooks, fetchBookByCategory, fetchAllBooks, fetchRecentlyBooks, fetchPopularBooks };

@@ -2,50 +2,52 @@ import React from "react";
 import { TBook } from "store/books/types";
 import { Loader } from "ui/Loader/Loader";
 import EyeIcon from "assets/icons/eye.svg";
+import { useNavigate } from "react-router-dom";
+import Button from "ui/Button/Button";
 
 interface IPropsCategoryList {
   items: TBook[];
   page: string;
+  decoration?: string;
+  handleAddToCard?: (event: React.MouseEvent, book: TBook) => void;
 }
 
-enum EPages {
+export enum EPages {
   all = "all",
+  home = "home",
   category = "category",
   recently = "recently",
   popular = "popular",
 }
 
-function checkCurrentPage({ page }: { page: string }): string {
-  switch (page) {
-    case EPages.recently:
-      return "home__book-list_image-container--recently";
-    case EPages.popular:
-      return "home__book-list_image-container--popular";
-    default:
-      return "";
-  }
-}
+export default function BookList({ items, page, decoration, handleAddToCard }: IPropsCategoryList) {
+  const navigate = useNavigate();
 
-export default function BookList({ items, page }: IPropsCategoryList) {
+  const goToDetailsPage = (event: React.MouseEvent) => {
+    const liElement = (event.target as HTMLLIElement).closest('li');
+    if (liElement) {
+      const bookId = liElement.id;
+      navigate(`/book/${bookId}`)
+    }
+  }
+
   return (
-    <ul className="home__books-list">
+    <ul className="home__books-list" data-page-type={page} onClick={goToDetailsPage}>
       {items.length > 0 &&
         items.map((book, inx) => {
           return (
-            <li className="home__books-list_item" key={inx}>
+            <li className="home__books-list_item" id={String(book.id)} data-page-type={page} key={inx}>
               <div
-                className={`home__book-list_image-container ${checkCurrentPage({
-                  page,
-                })}`}
+                className={`home__book-list_image-container`}
                 data-price={`${book.price} P`}
               >
-                {page === EPages.recently && (
-                  <p className="home__book-list-recently_image-decoration">
+                {decoration === EPages.recently && (
+                  <p className="timestemp-decoration" data-page-type={page}>
                     {book.createdAt}
                   </p>
                 )}
-                {page === EPages.popular && (
-                  <p className="home__book-list-popular_image-decoration">
+                {decoration === EPages.popular && (
+                  <p className="eye-decoration" data-page-type={page}>
                     <img src={EyeIcon} alt="Eye icon" />
                     {book.view}
                   </p>
@@ -59,6 +61,9 @@ export default function BookList({ items, page }: IPropsCategoryList) {
                 {book.title.at(0)?.toUpperCase() + book.title.slice(1)}
               </p>
               <p className="home__book-list_item-category">{book.category}</p>
+              {handleAddToCard && <Button id='button-add-to-card' style='details__button-add ' func={(event) => handleAddToCard(event,book)} type='button'>
+            Add to Cart
+        </Button>}
             </li>
           );
         })}

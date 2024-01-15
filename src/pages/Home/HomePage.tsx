@@ -7,8 +7,9 @@ import { Link } from "react-router-dom";
 import CategoryList from "components/CategoryList/CategoryList";
 import { useAppDispatch, useAppSelector } from "store/hook";
 import { fetchHomeBooks } from "store/books/booksOperations";
-import BookList from "components/BookList/BookList";
+import BookList, { EPages } from "components/BookList/BookList";
 import Footer from "components/Footer/Footer";
+import BasketButton from "components/BasketButton/BasketButton";
 
 export default function HomePage(): JSX.Element {
   const [search, setSearch] = useState(false);
@@ -38,47 +39,63 @@ export default function HomePage(): JSX.Element {
               <Title style="" h={3}>
                 Categories
               </Title>
-              <Link to={"/categories"} state={[]}>
+              <Link to={"/categories"}>
                 See all
               </Link>
             </div>
-              <CategoryList items={categories} page="home" />
+              <CategoryList items={categories} page={EPages.home} />
           </section>
           <section>
             <div className="home__categories">
               <Title style="" h={3}>
                 All books
               </Title>
-              <Link to={"/categories"} state={[]}>
+              <Link to={`/books/${EPages.all}`} state={{
+                title: "All books",
+                decoration: '',
+                page: EPages.all,
+                items: allBooks
+              }}>
                 See all
               </Link>
             </div>
-            <BookList items={allBooks.books} page="all" />
+            <BookList items={allBooks.books} page={EPages.home} />
           </section>
           <section>
             <div className="home__categories">
               <Title style="" h={3}>
                 Recently Added
               </Title>
-              <Link to={"/categories"} state={[]}>
+              <Link to={`/books/${EPages.recently}`} state={{
+                title: "Recently Added",
+                decoration: EPages.recently,
+                page: EPages.recently,
+                items: recentlyAdded
+              }}>
                 See all
               </Link>
             </div>
-            <BookList items={recentlyAdded.books} page="recently" />
+            <BookList items={recentlyAdded.books} page={EPages.home} decoration={EPages.recently} />
           </section>
           <section>
             <div className="home__categories">
               <Title style="" h={3}>
                 Popular
               </Title>
-              <Link to={"/categories"} state={[]}>
+              <Link to={`/books/${EPages.popular}`} state={{
+                title: "Most popular",
+                decoration: EPages.popular,
+                page: EPages.popular,
+                items: mostViewed
+              }}>
                 See all
               </Link>
             </div>
-            <BookList items={recentlyAdded.books} page="popular" />
+            <BookList items={mostViewed.books} page={EPages.home} decoration={EPages.popular} />
           </section>
         </>
       )}
+      <BasketButton />
       </div>
       <Footer />
     </>

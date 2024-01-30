@@ -45,6 +45,25 @@ const addToBasket = createAsyncThunk(
   },
 );
 
+// const removeFromBasket = createAsyncThunk(
+//   "user/removeFromBasket",
+//   async (payload: {id: number, token: string}, thunkApi) => {
+    
+//     try {
+//       const { data } = await axios.delete(`/api/user/basket/${payload.id}`, {
+//         headers: {
+//           "Access-Control-Allow-Origin": "*",
+//           Authorization: `Bearer ${payload.token}`,
+//         },
+//       });
+//       console.log(data);
+//       return data;
+//     } catch (error) {
+//       return thunkApi.rejectWithValue(error);
+//     }
+//   },
+// );
+
 // const getCompletedTodos = createAsyncThunk(
 //   "todos/fetchCompletedTodos",
 //   async ({ offset, limit, page }: TParametrsGetAll, thunkApi) => {
@@ -142,6 +161,6 @@ const addToBasket = createAsyncThunk(
 //   }
 // );
 
-// const updatePage = createAction<number>("todos/updatePage");
+const updateBasket = createAction<number>("user/updateBasket");
 
-export { getCurrentUser, addToBasket };
+export { getCurrentUser, addToBasket, updateBasket };

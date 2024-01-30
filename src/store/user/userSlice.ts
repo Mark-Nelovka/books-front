@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { getCurrentUser, addToBasket } from "./userOperations";
+import { getCurrentUser, addToBasket, updateBasket } from "./userOperations";
 import { IPayloadAddToBasketSuccess, IUserState } from "./types";
 // import { IAuthState, IPayloadActionAuthSuccess } from "./types";
 // import { IPayloadActionSuccess, ITodosState } from "./types";
@@ -47,6 +47,10 @@ const UserSlice = createSlice({
         state.error.message = payload.response.data.message;
       }
     );
+
+    builder.addCase(updateBasket, (state, { payload }: PayloadAction<number>) => {
+      state.user.basket = payload;
+    });
   },
 });
 

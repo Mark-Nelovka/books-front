@@ -2,7 +2,7 @@ import axios from "axios";
 import { createAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { IRegistrationInfoUser, ISignInInfoUser } from "./types";
 
-axios.defaults.baseURL = "https://p01--books--qqfgrnqblfk9.code.run";
+axios.defaults.baseURL = "http://localhost:8080";
 // https://p01--books--qqfgrnqblfk9.code.run
 // http://localhost:8080
 const registrationUser = createAsyncThunk(

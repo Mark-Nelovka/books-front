@@ -4,17 +4,20 @@ import Title from 'components/Title/Title'
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { TBook } from 'store/books/types'
-import { useAppSelector } from 'store/hook'
+import { useAppDispatch, useAppSelector } from 'store/hook'
 import Button from 'ui/Button/Button'
 import { Loader } from 'ui/Loader/Loader'
 import DeleteIcon from "assets/icons/remove-icon.svg"
 import BackIcon from "assets/icons/arrow-left.svg";
+import { updateBasket } from 'store/user/userOperations'
+import removeFromBasket from 'API/removeFromBasket'
 
 export default function BasketPage() {
     const [basketItems, setBasketItems] = useState<TBook[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState("");
     const token = useAppSelector(state => state.auth.token);
+    const dispatch = useAppDispatch()
 
     const fetchData = async () => {
         setIsLoading(true);
@@ -34,6 +37,22 @@ export default function BasketPage() {
     useEffect(() => {
         fetchData();
     }, [])
+
+    const remove = async (id: number) => {
+        if(id && token) {
+            const data = await removeFromBasket({id, token});
+            if(!data.data) {
+                setError(`${data.message}`)
+            } else {
+                setError("")
+                setBasketItems(data.data.books);
+                dispatch(updateBasket(data.data.books.length))
+            }
+           
+        } else {
+            setError("Some error")
+        }
+    }
     
   return (
     <>
@@ -63,7 +82,7 @@ export default function BasketPage() {
                         <p>{book.author}</p>
                         <p>{book.price}</p>
                     </div>
-                    <Button id='button-basket-delete' type='button' style='basket__delete-button'>
+                    <Button id='button-basket-delete' func={() => remove(book.id)} type='button' style='basket__delete-button'>
                         <img src={DeleteIcon} alt='Basket delete icon' />
                     </Button>
                 </li>

@@ -22,7 +22,7 @@ export interface IUserState {
 
 export interface IPayloadAddToBasket {
   token: string,
-  book: TBook
+  book: Partial<TBook>
 }
 
 export interface IPayloadAddToBasketSuccess {

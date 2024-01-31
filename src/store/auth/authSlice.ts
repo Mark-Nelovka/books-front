@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { registrationUser, resetError, signInUser } from "./authOperations";
 import { IAuthState, IPayloadActionAuthSuccess } from "./types";
-// import { IPayloadActionSuccess, ITodosState } from "./types";
 
 export const initialState: IAuthState = {
   token: null,

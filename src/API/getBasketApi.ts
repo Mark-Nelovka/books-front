@@ -1,9 +1,9 @@
 import React from 'react'
-import axios from 'axios';
+import { axiosInstance } from 'store/auth/authOperations';
 
 export default async function getBasketApi(token: string) {
     try {
-        const { data } = await axios.get(`/api/user/basket`, {
+        const { data } = await axiosInstance.get(`/api/user/basket`, {
           headers: {
             "Access-Control-Allow-Origin": "*",
             Authorization: `Bearer ${token}`,

@@ -1,10 +1,10 @@
-import axios from 'axios';
 import React from 'react'
 import { TBook } from 'store/books/types';
+import { axiosInstance } from 'store/auth/authOperations';
 
 export default async function AddToFavorites(book: Partial<TBook>, token: string) {
     try {
-        const { data } = await axios.post(`/api/user/favorites`, book, {
+        const { data } = await axiosInstance.post(`/api/user/favorites`, book, {
           headers: {
             "Access-Control-Allow-Origin": "*",
             Authorization: `Bearer ${token}`,

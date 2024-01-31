@@ -1,9 +1,9 @@
-import axios from 'axios';
+import { axiosInstance } from 'store/auth/authOperations';
 import React from 'react'
 
 export default async function SearchBooksApi(searchStr: string, token: string) {
     try {
-        const { data } = await axios.get(`/api/books/search?search=${searchStr}`, {
+        const { data } = await axiosInstance.get(`/api/books/search?search=${searchStr}`, {
           headers: {
             "Access-Control-Allow-Origin": "*",
             Authorization: `Bearer ${token}`,

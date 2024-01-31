@@ -27,7 +27,6 @@ const BasketPage = lazy(
 );
 
 function App() {
-  console.log("Appasdfsafs");
   return (
     <>
       <main>

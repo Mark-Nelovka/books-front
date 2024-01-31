@@ -1,7 +1,7 @@
 import getBasketApi from 'API/getBasketApi'
 import Header from 'components/Header/Header'
 import Title from 'components/Title/Title'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { TBook } from 'store/books/types'
 import { useAppDispatch, useAppSelector } from 'store/hook'
@@ -34,6 +34,7 @@ export default function BasketPage() {
         }
         setIsLoading(false);
     }
+
     useEffect(() => {
         fetchData();
     }, [])
@@ -53,6 +54,12 @@ export default function BasketPage() {
             setError("Some error")
         }
     }
+
+    const calculatePrice = useMemo(() => {
+        return basketItems.reduce((acc, el) => Number.isNaN(+el.price) 
+        ? acc += +el.price.slice(1) 
+        : acc += +el.price, 0)
+    }, [basketItems])
     
   return (
     <>
@@ -92,25 +99,18 @@ export default function BasketPage() {
         {basketItems.length > 0 &&
          <div className='basket__footer'>
          <div className='basket__footer_content-container'>
-             <div className='basket__footer-text'><span>Item Value</span><span>{basketItems.reduce((acc, el) => {
-                 acc += +el.price.slice(1)
-                 return acc
-                 }, 0)}</span></div>
+             <div className='basket__footer-text'><span>Item Value</span><span>{calculatePrice}</span></div>
              <div className='basket__footer-text'><span>Shipment Fee</span><span>Collect on delivery</span></div>
          </div>
          <div className='basket__footer_total-container'>
             <span>Total</span>
-            <span>{basketItems.reduce((acc, el) => {
-                 acc += +el.price.slice(1)
-                 return acc
-                 }, 0)}</span>
+            <span>{calculatePrice}</span>
          </div>
          <Button style='basket__footer_button' id='button-basket-footer' type='button'>
              Proceed to Checkout
          </Button>
      </div>
         }
-       
       </>
   )
 }

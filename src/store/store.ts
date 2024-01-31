@@ -27,7 +27,7 @@ const UserPersistConfig = {
 
 const BooksPersistConfig = {
   key: "books",
-  storage,
+  storage
 };
 
 const AuthPersistedReducer = persistReducer(AuthPersistConfig, authReducer);

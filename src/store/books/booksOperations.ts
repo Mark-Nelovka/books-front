@@ -2,11 +2,7 @@ import axios from "axios";
 import { createAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { RootStore } from "store/store";
 import { SuccessPayloadFetchHomeBooks, SuccessPayloadGetBookByCategory, SuccessPayloadGetSearchedBook, SuccessPayloadSearchBook, TBook, booksForPages } from "./types";
-// import {
-//   IRegistrationInfoUser,
-// } from "./types";
-
-axios.defaults.baseURL = "http://localhost:8080";
+import { axiosInstance } from "store/auth/authOperations";
 
 const fetchHomeBooks = createAsyncThunk<
   SuccessPayloadFetchHomeBooks,
@@ -22,7 +18,7 @@ const fetchHomeBooks = createAsyncThunk<
         message: "Unauthorized",
       };
     
-    const { data } = await axios.get(`/api/books/home`, {
+    const { data } = await axiosInstance.get(`/api/books/home`, {
       headers: {
         "Access-Control-Allow-Origin": "*",
         Authorization: `Bearer ${token}`,
@@ -50,7 +46,7 @@ SuccessPayloadGetBookByCategory,
         message: "Unauthorized",
       };
     
-    const { data } = await axios.get(`/api/books${param}`, {
+    const { data } = await axiosInstance.get(`/api/books${param}`, {
       headers: {
         "Access-Control-Allow-Origin": "*",
         Authorization: `Bearer ${token}`,
@@ -78,7 +74,7 @@ SuccessPayloadGetBookByCategory,
         message: "Unauthorized",
       };
     
-    const { data } = await axios.get(`/api/books${param}`, {
+    const { data } = await axiosInstance.get(`/api/books${param}`, {
       headers: {
         "Access-Control-Allow-Origin": "*",
         Authorization: `Bearer ${token}`,
@@ -106,7 +102,7 @@ SuccessPayloadGetBookByCategory,
         message: "Unauthorized",
       };
     
-    const { data } = await axios.get(`/api/books${param}`, {
+    const { data } = await axiosInstance.get(`/api/books${param}`, {
       headers: {
         "Access-Control-Allow-Origin": "*",
         Authorization: `Bearer ${token}`,
@@ -134,7 +130,7 @@ SuccessPayloadGetBookByCategory,
         message: "Unauthorized",
       };
     
-    const { data } = await axios.get(`/api/books${param}`, {
+    const { data } = await axiosInstance.get(`/api/books${param}`, {
       headers: {
         "Access-Control-Allow-Origin": "*",
         Authorization: `Bearer ${token}`,

@@ -22,8 +22,6 @@ export default function HomePage(): JSX.Element {
   useEffect(() => {
     if (allBooks.books.length > 0) return;
     dispatch(fetchHomeBooks());
-   
-    // console.log()
   }, []);
 
   return (

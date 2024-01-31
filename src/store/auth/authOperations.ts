@@ -2,20 +2,28 @@ import axios from "axios";
 import { createAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { IRegistrationInfoUser, ISignInInfoUser } from "./types";
 
-axios.defaults.baseURL = "http://localhost:8080";
+export const axiosInstance = axios.create({
+  baseURL: 'https://p01--books--qqfgrnqblfk9.code.run',
+  headers: {
+    'Access-Control-Allow-Origin': '*',
+  },
+});
 // https://p01--books--qqfgrnqblfk9.code.run
 // http://localhost:8080
+
 const registrationUser = createAsyncThunk(
   "auth/registration",
   async (payload: IRegistrationInfoUser, thunkApi) => {
     console.log("payloadRegistration: ", payload);
     try {
-      const { data } = await axios.post(`/api/auth/registration`, payload, {
+      const { data } = await axiosInstance.post(`/api/auth/registration`, payload, {
         headers: {
           "Access-Control-Allow-Origin": "*",
         },
       });
       if (!data) throw data;
+      const token = data.accessToken;
+      axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       return data;
     } catch (error) {
       return thunkApi.rejectWithValue(error);
@@ -28,12 +36,10 @@ const signInUser = createAsyncThunk(
   async (payload: ISignInInfoUser, thunkApi) => {
     console.log("payloadRegistration: ", payload);
     try {
-      const { data } = await axios.post(`/api/auth/login`, payload, {
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-        },
-      });
+      const { data } = await axiosInstance.post(`/api/auth/login`, payload);
       if (!data) throw data;
+      const token = data.accessToken;
+      axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       return data;
     } catch (error) {
       return thunkApi.rejectWithValue(error);

@@ -2,17 +2,14 @@ import axios from "axios";
 import { createAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { TBook } from "store/books/types";
 import { IPayloadAddToBasket } from "./types";
-// import {
-//   IRegistrationInfoUser,
-// } from "./types";
+import { axiosInstance } from "store/auth/authOperations";
 
-// axios.defaults.baseURL = "https://p01--books--qqfgrnqblfk9.code.run/";
 
 const getCurrentUser = createAsyncThunk(
   "user/getUser",
   async (payload: string, thunkApi) => {
     try {
-      const { data } = await axios.get(``, {
+      const { data } = await axiosInstance.get(``, {
         headers: {
           "Access-Control-Allow-Origin": "*",
           Bearer: `${payload}`,
@@ -31,7 +28,7 @@ const addToBasket = createAsyncThunk(
   async (payload: IPayloadAddToBasket, thunkApi) => {
     
     try {
-      const { data } = await axios.post(`/api/user/basket`, payload.book, {
+      const { data } = await axiosInstance.post(`/api/user/basket`, payload.book, {
         headers: {
           "Access-Control-Allow-Origin": "*",
           Authorization: `Bearer ${payload.token}`,

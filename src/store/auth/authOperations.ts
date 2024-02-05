@@ -6,6 +6,7 @@ export const axiosInstance = axios.create({
   baseURL: 'https://p01--books--qqfgrnqblfk9.code.run',
   headers: {
     'Access-Control-Allow-Origin': '*',
+    'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1hcmtlbF9AdWtyLm5ldCIsInN1YiI6MSwiaWF0IjoxNzA2NzIwNTU2fQ.XGsyk5HsrLlLRfYR__a1TO6rAH-v1F00va88iZ5Ppgk'
   },
 });
 // https://p01--books--qqfgrnqblfk9.code.run

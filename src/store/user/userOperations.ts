@@ -23,25 +23,6 @@ const getCurrentUser = createAsyncThunk(
   },
 );
 
-const addToBasket = createAsyncThunk(
-  "user/addToBasket",
-  async (payload: IPayloadAddToBasket, thunkApi) => {
-    
-    try {
-      const { data } = await axiosInstance.post(`/api/user/basket`, payload.book, {
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          Authorization: `Bearer ${payload.token}`,
-        },
-      });
-      console.log(data);
-      return data;
-    } catch (error) {
-      return thunkApi.rejectWithValue(error);
-    }
-  },
-);
-
 // const removeFromBasket = createAsyncThunk(
 //   "user/removeFromBasket",
 //   async (payload: {id: number, token: string}, thunkApi) => {
@@ -158,6 +139,4 @@ const addToBasket = createAsyncThunk(
 //   }
 // );
 
-const updateBasket = createAction<number>("user/updateBasket");
-
-export { getCurrentUser, addToBasket, updateBasket };
+export { getCurrentUser };

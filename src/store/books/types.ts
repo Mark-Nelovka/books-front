@@ -9,6 +9,7 @@ export type TBook = {
   category: string;
   genre: string;
   condition: string;
+  isAddedToCart: boolean;
   pages: number;
   status: "pending" | "completed" | "destroyed";
   isFavorite: boolean;

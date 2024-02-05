@@ -109,11 +109,18 @@ margin-right: 8px;
 font-style: normal;
     }
 }
+
 .details__button-add {
     @include main-text(16px, 500, normal, $white);
+    position: relative;
     padding: 12px;
+    height: 50px;
     text-align: center;
     font-style: normal;
     background-color: $gray-100;
     width: 100%;
+    & .loader {
+        width: 15px;
+        height: 15px;
+    }
 }

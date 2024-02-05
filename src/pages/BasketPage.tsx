@@ -1,58 +1,37 @@
-import getBasketApi from 'API/getBasketApi'
 import Header from 'components/Header/Header'
 import Title from 'components/Title/Title'
 import React, { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { TBook } from 'store/books/types'
-import { useAppDispatch, useAppSelector } from 'store/hook'
+import { useAppDispatch } from 'store/hook'
 import Button from 'ui/Button/Button'
 import { Loader } from 'ui/Loader/Loader'
 import DeleteIcon from "assets/icons/remove-icon.svg"
 import BackIcon from "assets/icons/arrow-left.svg";
-import { updateBasket } from 'store/user/userOperations'
-import removeFromBasket from 'API/removeFromBasket'
+import { ApiService } from 'API/ApiService'
+import useSWR from 'swr'
+import { updateBasket } from 'store/user/userSlice'
+const api = new ApiService();
 
 export default function BasketPage() {
     const [basketItems, setBasketItems] = useState<TBook[]>([]);
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState("");
-    const token = useAppSelector(state => state.auth.token);
+    const [loaded, setLoaded] = useState(false);
     const dispatch = useAppDispatch()
-
-    const fetchData = async () => {
-        setIsLoading(true);
-        if(token) {
-            const data = await getBasketApi(token)
-            if(!data.data) {
-                setError(data.message);
-            } else {
-                setBasketItems(data.data.books);
-            }
-
-        } else {
-            setError("Invalid token")
-        }
-        setIsLoading(false);
-    }
+    
+    const { data, error, isLoading, isValidating, mutate } = useSWR('api/user/basket', api.get);
 
     useEffect(() => {
-        fetchData();
-    }, [])
-
+        setLoaded(isLoading);
+        data && setBasketItems(data.data.books);
+        data && dispatch(updateBasket(data.data.books.length))
+         setLoaded(isLoading);
+    }, [data, isLoading])
+    
     const remove = async (id: number) => {
-        if(id && token) {
-            const data = await removeFromBasket({id, token});
-            if(!data.data) {
-                setError(`${data.message}`)
-            } else {
-                setError("")
-                setBasketItems(data.data.books);
-                dispatch(updateBasket(data.data.books.length))
-            }
-           
-        } else {
-            setError("Some error")
-        }
+        setLoaded(true);
+        const updateBookList = await api.delete(`api/user/basket/${id}`)
+        mutate && await mutate(updateBookList, false);
+        setLoaded(false);
     }
 
     const calculatePrice = useMemo(() => {
@@ -75,9 +54,9 @@ export default function BasketPage() {
       </Header>
       <div className='container'>
         <ul className='basket__list'>
-            {isLoading && <Loader size='100px' />}
-            {error && <p>{error}</p>}
-            {!isLoading && !error 
+            {loaded && <Loader size='100px' />}
+            {error && <p>{error.message}</p>}
+            {!loaded && !error 
             && basketItems.length > 0 
             && basketItems.map((book) => {
                 return <li className='basket__list-item' key={book.id}>
@@ -89,7 +68,11 @@ export default function BasketPage() {
                         <p>{book.author}</p>
                         <p>{book.price}</p>
                     </div>
-                    <Button id='button-basket-delete' func={() => remove(book.id)} type='button' style='basket__delete-button'>
+                    <Button 
+                    id='button-basket-delete' 
+                    func={() => remove(book.id)} 
+                    type='button' 
+                    style='basket__delete-button'>
                         <img src={DeleteIcon} alt='Basket delete icon' />
                     </Button>
                 </li>

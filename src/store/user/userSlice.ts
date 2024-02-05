@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { getCurrentUser, addToBasket, updateBasket } from "./userOperations";
+import { getCurrentUser } from "./userOperations";
 import { IPayloadAddToBasketSuccess, IUserState } from "./types";
 // import { IAuthState, IPayloadActionAuthSuccess } from "./types";
 // import { IPayloadActionSuccess, ITodosState } from "./types";
@@ -27,31 +27,12 @@ export const initialState: IUserState = {
 const UserSlice = createSlice({
   name: "user",
   initialState,
-  reducers: {},
-  extraReducers: (builder) => {
-    builder.addCase(
-      addToBasket.fulfilled,
-      (
-        state: IUserState,
-        { payload }: PayloadAction<IPayloadAddToBasketSuccess>
-      ) => {
-        state.user.basket = state.user.basket += 1;
-        state.error.status = null;
-        state.error.message = "";
-      }
-    );
-    builder.addCase(
-      addToBasket.rejected,
-      (state: IUserState, { payload }: any) => {
-        state.error.status = payload.response.data.status;
-        state.error.message = payload.response.data.message;
-      }
-    );
-
-    builder.addCase(updateBasket, (state, { payload }: PayloadAction<number>) => {
-      state.user.basket = payload;
-    });
+  reducers: {
+    updateBasket(state, action) {
+      state.user.basket = action.payload;
+    },
   },
+  extraReducers: () => {}
 });
-
+export const { updateBasket } = UserSlice.actions;
 export default UserSlice.reducer;

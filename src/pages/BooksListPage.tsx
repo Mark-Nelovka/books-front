@@ -14,7 +14,6 @@ import { Loader } from 'ui/Loader/Loader';
 import Filter from 'components/Filter/Filter';
 import { TBook } from 'store/books/types';
 import BasketButton from 'components/BasketButton/BasketButton';
-import { addToBasket } from 'store/user/userOperations';
 
 export function getCurrentPage(path: string) {
   return path.split('?')[0].split('/').reverse()[0];
@@ -96,7 +95,7 @@ export default function BooksListPage() {
     const handleAddToCard = (event: React.MouseEvent, book: TBook) => {
       event.stopPropagation();
       if(token && book) {
-        dispatch(addToBasket({book,token}))
+        // dispatch(addToBasket({book,token}))
       }
     }
 

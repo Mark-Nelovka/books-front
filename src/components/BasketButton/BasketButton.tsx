@@ -5,12 +5,11 @@ import BasketIcon from 'assets/icons/bascet-icon.svg';
 import { Link } from 'react-router-dom';
 
 
-export default function BasketButton({handleBasket}: {handleBasket?: () => void}) {
+export default function BasketButton() {
     const count = useAppSelector(state => state.user.user.basket);
   return (
     <Button id='button-basket' style='basket-button' 
     basketCount={count}
-    func={handleBasket}
     type='button'>
       <Link to='/user/basket'>
       <img src={BasketIcon} alt='Basket button' />

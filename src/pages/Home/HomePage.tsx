@@ -10,11 +10,9 @@ import { fetchHomeBooks } from "store/books/booksOperations";
 import BookList, { EPages } from "components/BookList/BookList";
 import Footer from "components/Footer/Footer";
 import BasketButton from "components/BasketButton/BasketButton";
-import axios from "axios";
 
 export default function HomePage(): JSX.Element {
   const [search, setSearch] = useState(false);
-  const token = useAppSelector(state => state.auth.token); 
   const { allBooks, error, categories, recentlyAdded, mostViewed } =
     useAppSelector((state) => state.books);
   const dispatch = useAppDispatch();

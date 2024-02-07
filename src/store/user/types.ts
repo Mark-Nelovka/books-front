@@ -28,3 +28,8 @@ export interface IPayloadAddToBasket {
 export interface IPayloadAddToBasketSuccess {
   book: number
 }
+
+export enum counterOperations {
+  increment = 'INCREMENT',
+  decrement = 'DECREMENT'
+}

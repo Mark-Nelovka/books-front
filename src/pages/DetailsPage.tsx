@@ -3,7 +3,7 @@ import Title from 'components/Title/Title';
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { TBook } from 'store/books/types';
-import { useAppDispatch } from 'store/hook';
+import useLoaders, { RequestMethods, useAppDispatch } from 'store/hook';
 import Button from 'ui/Button/Button';
 import { Loader, LoaderPropagate } from 'ui/Loader/Loader';
 import Footer from 'components/Footer/Footer';
@@ -15,34 +15,35 @@ import SVGCustomIcon from 'general/SVG';
 import { ApiService } from 'API/ApiService';
 import { updateBasket } from 'store/user/userSlice';
 import Notiflix from 'notiflix';
-const api = new ApiService();
+import { api } from './Home/HomePage';
 
 export default function DetailsPage(): JSX.Element {
     const [book, setBook] = useState<Partial<TBook>>();
-    const [error, setError] = useState("");
-    const [isAddToCartLoader, setIsAddToCartLoader] = useState(false);
+    const [loaders, changeLoaders] = useLoaders();
   const params = useParams();
   const dispatch = useAppDispatch();
 
-  const { data, isLoading, isValidating, mutate } = useSWR(`/api/books/${params.bookId}`, api.get, {
-    onSuccess(data, key, config) {
+  const { data, error, isLoading, mutate } = useSWR(`/api/books/${params.bookId}`, api.get, {
+    onSuccess(data) {
       setBook(data.data);
-      isAddToCartLoader && setIsAddToCartLoader(false);
-    },
-    onError(err, key, config) {
-      setError(err.message || "Error")
-      isAddToCartLoader && setIsAddToCartLoader(false);
-    },
+    }
   });
+
+  useEffect(() => {
+    book && setBook(data.data);
+  }, [data])
+  
   
   const handleAddToCart = async () => {
-    setIsAddToCartLoader(true);
+    changeLoaders(RequestMethods.POST);
     try {
       const updateCart = await api.post(`/api/user/basket`, book!)
-      mutate({data: {...book, isAddedToCart: true}})
+      await mutate({data: {...book, isAddedToCart: true}}, false);
       dispatch(updateBasket(updateCart.count));
     } catch (error) {
-      console.log(error)
+      Notiflix.Notify.failure(`${error}`)
+    } finally {
+      changeLoaders()
     }
   }
 
@@ -50,7 +51,7 @@ export default function DetailsPage(): JSX.Element {
   if(book && !book.isFavorite) {
     try {
       await api.post('api/user/favorites', book);
-      mutate({data: {...book, isFavorite: true}})
+      mutate({data: {...book, isFavorite: true}}, false)
     } catch (error) {
       Notiflix.Notify.failure(`${error}`)
     }
@@ -59,7 +60,7 @@ export default function DetailsPage(): JSX.Element {
   if(book && book.isFavorite) {
     try {
       await api.delete(`api/user/favorites/${book.id}`);
-      mutate(mutate({data: {...book, isFavorite: false}}))
+      mutate({data: {...book, isFavorite: false}}, false);
     } catch (error) {
       Notiflix.Notify.failure(`${error}`)
     }
@@ -106,9 +107,9 @@ export default function DetailsPage(): JSX.Element {
         <p><span>Dimensions:</span><span>{book.dimensions}</span></p>
         </div>
         <Button id='button-add-to-card' disabled={book.isAddedToCart} style='details__button-add ' func={handleAddToCart} type='button'>
-            {isAddToCartLoader && <LoaderPropagate />}
-            {!isAddToCartLoader && book.isAddedToCart && 'In cart'}
-            {!isAddToCartLoader && !book.isAddedToCart && 'Add to Cart'}
+            {loaders.postLoader && <LoaderPropagate />}
+            {!loaders.postLoader && book.isAddedToCart && 'In cart'}
+            {!loaders.postLoader && !book.isAddedToCart && 'Add to Cart'}
         </Button>
       </div>
       <BasketButton />

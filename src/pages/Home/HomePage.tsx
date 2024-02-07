@@ -5,22 +5,67 @@ import NotificationIcon from "assets/icons/ring-notif-icon.svg";
 import SearchForm from "components/Forms/SearchForm";
 import { Link } from "react-router-dom";
 import CategoryList from "components/CategoryList/CategoryList";
-import { useAppDispatch, useAppSelector } from "store/hook";
-import { fetchHomeBooks } from "store/books/booksOperations";
+import { useAppDispatch } from "store/hook";
 import BookList, { EPages } from "components/BookList/BookList";
 import Footer from "components/Footer/Footer";
 import BasketButton from "components/BasketButton/BasketButton";
+import useSWR from "swr";
+import { ApiService } from "API/ApiService";
+import { fetchHomeBooks } from "store/books/booksSlice";
+import { booksForPages } from "store/books/types";
+
+export const api = new ApiService();
+
+interface IHomeBooks {
+  categories: [{ name: string; count: number; image: string }];
+  recentlyAdded: booksForPages;
+  mostViewed: booksForPages;
+  allBooks: booksForPages;
+}
 
 export default function HomePage(): JSX.Element {
   const [search, setSearch] = useState(false);
-  const { allBooks, error, categories, recentlyAdded, mostViewed } =
-    useAppSelector((state) => state.books);
+  const [books, setBooks] = useState<IHomeBooks>({
+    categories: [{name: '', count: 0, image: ''}],
+    allBooks: {
+      books: [],
+      info: {
+        currentPage: '',
+        nextPage: ''
+      }
+    },
+    mostViewed: {
+      books: [],
+      info: {
+        currentPage: '',
+        nextPage: ''
+      }
+    },
+    recentlyAdded: {
+      books: [],
+      info: {
+        currentPage: '',
+        nextPage: ''
+      }
+    },
+  })
   const dispatch = useAppDispatch();
 
+  const { error } = useSWR('api/books/home', api.get, {
+    onSuccess(data) {
+      const { categories, allBooks, mostViewed, recentlyAdded} = data.data;
+      setBooks({
+        categories,
+        mostViewed,
+        recentlyAdded,
+        allBooks
+      })
+    }
+  });
+
   useEffect(() => {
-    if (allBooks.books.length > 0) return;
-    dispatch(fetchHomeBooks());
-  }, []);
+    dispatch(fetchHomeBooks(books));
+  }, [books]);
 
   return (
     <>
@@ -42,7 +87,7 @@ export default function HomePage(): JSX.Element {
                 See all
               </Link>
             </div>
-              <CategoryList items={categories} page={EPages.home} />
+              <CategoryList items={books.categories} page={EPages.home} />
           </section>
           <section>
             <div className="home__categories">
@@ -53,12 +98,12 @@ export default function HomePage(): JSX.Element {
                 title: "All books",
                 decoration: '',
                 page: EPages.all,
-                items: allBooks
+                items: books.allBooks
               }}>
                 See all
               </Link>
             </div>
-            <BookList items={allBooks.books} page={EPages.home} />
+            <BookList items={books.allBooks.books} page={EPages.home} />
           </section>
           <section>
             <div className="home__categories">
@@ -69,12 +114,12 @@ export default function HomePage(): JSX.Element {
                 title: "Recently Added",
                 decoration: EPages.recently,
                 page: EPages.recently,
-                items: recentlyAdded
+                items: books.recentlyAdded
               }}>
                 See all
               </Link>
             </div>
-            <BookList items={recentlyAdded.books} page={EPages.home} decoration={EPages.recently} />
+            <BookList items={books.recentlyAdded.books} page={EPages.home} decoration={EPages.recently} />
           </section>
           <section>
             <div className="home__categories">
@@ -85,12 +130,12 @@ export default function HomePage(): JSX.Element {
                 title: "Most popular",
                 decoration: EPages.popular,
                 page: EPages.popular,
-                items: mostViewed
+                items: books.mostViewed
               }}>
                 See all
               </Link>
             </div>
-            <BookList items={mostViewed.books} page={EPages.home} decoration={EPages.popular} />
+            <BookList items={books.mostViewed.books} page={EPages.home} decoration={EPages.popular} />
           </section>
         </>
       )}

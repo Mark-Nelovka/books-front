@@ -1,36 +1,7 @@
-import axios from "axios";
-import { createAction, createAsyncThunk } from "@reduxjs/toolkit";
+import { createAsyncThunk } from "@reduxjs/toolkit";
 import { RootStore } from "store/store";
-import { SuccessPayloadFetchHomeBooks, SuccessPayloadGetBookByCategory, SuccessPayloadGetSearchedBook, SuccessPayloadSearchBook, TBook, booksForPages } from "./types";
+import { SuccessPayloadGetBookByCategory, SuccessPayloadGetSearchedBook, SuccessPayloadSearchBook, TBook, booksForPages } from "./types";
 import { axiosInstance } from "store/auth/authOperations";
-
-const fetchHomeBooks = createAsyncThunk<
-  SuccessPayloadFetchHomeBooks,
-  void,
-  { state: RootStore }
->("books/getBooksForHome", async (_, thunkApi) => {
-  try {
-    const token = thunkApi.getState().auth.token;
-
-    if (!token)
-      throw {
-        status: 401,
-        message: "Unauthorized",
-      };
-    
-    const { data } = await axiosInstance.get(`/api/books/home`, {
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    if(!data.data) throw data
-    console.log(data);
-    return data;
-  } catch (error) {
-    return thunkApi.rejectWithValue(error);
-  }
-});
 
 const fetchBookByCategory = createAsyncThunk<
 SuccessPayloadGetBookByCategory,
@@ -245,4 +216,4 @@ SuccessPayloadGetBookByCategory,
 
 // const updatePage = createAction<number>("todos/updatePage");
 
-export { fetchHomeBooks, fetchBookByCategory, fetchAllBooks, fetchRecentlyBooks, fetchPopularBooks };
+export { fetchBookByCategory, fetchAllBooks, fetchRecentlyBooks, fetchPopularBooks };

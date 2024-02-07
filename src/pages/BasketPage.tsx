@@ -3,35 +3,45 @@ import Title from 'components/Title/Title'
 import React, { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { TBook } from 'store/books/types'
-import { useAppDispatch } from 'store/hook'
+import useLoaders, { RequestMethods, useAppDispatch } from 'store/hook'
 import Button from 'ui/Button/Button'
-import { Loader } from 'ui/Loader/Loader'
+import { Loader, LoaderFade } from 'ui/Loader/Loader'
 import DeleteIcon from "assets/icons/remove-icon.svg"
 import BackIcon from "assets/icons/arrow-left.svg";
 import { ApiService } from 'API/ApiService'
 import useSWR from 'swr'
 import { updateBasket } from 'store/user/userSlice'
-const api = new ApiService();
+import Notiflix from 'notiflix'
+import { api } from './Home/HomePage'
+import { counterOperations } from 'store/user/types'
 
 export default function BasketPage() {
     const [basketItems, setBasketItems] = useState<TBook[]>([]);
-    const [loaded, setLoaded] = useState(false);
+    const [removeId, setRemoveId] = useState(0);
     const dispatch = useAppDispatch()
     
-    const { data, error, isLoading, isValidating, mutate } = useSWR('api/user/basket', api.get);
+    const { data, error, isLoading, mutate } = useSWR('api/user/basket', api.get, {
+        onSuccess(data) {
+            setBasketItems(data.data.books);
+            dispatch(updateBasket(data.data.books.length))
+        },
+        revalidateOnFocus: false
+    });
 
     useEffect(() => {
-        setLoaded(isLoading);
-        data && setBasketItems(data.data.books);
-        data && dispatch(updateBasket(data.data.books.length))
-         setLoaded(isLoading);
-    }, [data, isLoading])
+      basketItems.length > 0 && setBasketItems(data.data.books);
+    }, [data])
     
+
     const remove = async (id: number) => {
-        setLoaded(true);
-        const updateBookList = await api.delete(`api/user/basket/${id}`)
-        mutate && await mutate(updateBookList, false);
-        setLoaded(false);
+        setRemoveId(id);
+        try {
+            const updateBookList = await api.delete(`api/user/basket/${id}`)
+            mutate(updateBookList, false);
+            dispatch(updateBasket(counterOperations.decrement));
+        } catch (error) {
+            Notiflix.Notify.failure(`${error}`)
+        }
     }
 
     const calculatePrice = useMemo(() => {
@@ -54,12 +64,13 @@ export default function BasketPage() {
       </Header>
       <div className='container'>
         <ul className='basket__list'>
-            {loaded && <Loader size='100px' />}
-            {error && <p>{error.message}</p>}
-            {!loaded && !error 
+            {isLoading && <Loader size='100px' />}
+            {error && <p>{error}</p>}
+            {!error 
             && basketItems.length > 0 
             && basketItems.map((book) => {
-                return <li className='basket__list-item' key={book.id}>
+                return <li className='basket__list-item ' key={book.id}>
+                    {removeId === book.id && <div className='loader__remove-item'><LoaderFade /></div>}
                     <div className='basket__list_image-container'>
                         <img src={book.images[0]} alt={book.title} />
                     </div>

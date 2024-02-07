@@ -14,6 +14,10 @@ import { Loader } from 'ui/Loader/Loader';
 import Filter from 'components/Filter/Filter';
 import { TBook } from 'store/books/types';
 import BasketButton from 'components/BasketButton/BasketButton';
+import { api } from './Home/HomePage';
+import Notiflix from 'notiflix';
+import { updateBasket } from 'store/user/userSlice';
+import { counterOperations } from 'store/user/types';
 
 export function getCurrentPage(path: string) {
   return path.split('?')[0].split('/').reverse()[0];
@@ -24,7 +28,6 @@ export default function BooksListPage() {
     const [isLoading, setIsLoading] = useState(false);
     const [books, setBooks] = useState<TBook[]>([]);
     const state = useAppSelector(state => state.books);
-    const token = useAppSelector(state => state.auth.token);
     const dispatch = useAppDispatch();
     const location = useLocation();
     const navigate = useNavigate();
@@ -92,10 +95,13 @@ export default function BooksListPage() {
       fetchData(query)
     }, []);     
     
-    const handleAddToCard = (event: React.MouseEvent, book: TBook) => {
+    const handleAddToCard = async (event: React.MouseEvent, book: TBook) => {
       event.stopPropagation();
-      if(token && book) {
-        // dispatch(addToBasket({book,token}))
+      try {
+        await api.post('api/user/basket', book);
+        dispatch(updateBasket(counterOperations.increment));
+      } catch (error) {
+        Notiflix.Notify.failure(`${error}`);
       }
     }
 

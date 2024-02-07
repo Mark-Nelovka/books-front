@@ -1,8 +1,5 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { getCurrentUser } from "./userOperations";
-import { IPayloadAddToBasketSuccess, IUserState } from "./types";
-// import { IAuthState, IPayloadActionAuthSuccess } from "./types";
-// import { IPayloadActionSuccess, ITodosState } from "./types";
+import { createSlice } from "@reduxjs/toolkit";
+import { IUserState, counterOperations } from "./types";
 
 export const initialState: IUserState = {
   user: {
@@ -28,8 +25,19 @@ const UserSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    updateBasket(state, action) {
-      state.user.basket = action.payload;
+    updateBasket(state, {payload}) {
+      switch (payload) {
+        case counterOperations.increment:
+          state.user.basket += 1;
+          break;
+        case counterOperations.decrement:
+          state.user.basket -= 1;
+          break;
+      
+        default:
+          state.user.basket = payload || 0;
+          break;
+      }
     },
   },
   extraReducers: () => {}

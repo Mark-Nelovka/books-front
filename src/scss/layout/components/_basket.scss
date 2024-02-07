@@ -14,11 +14,18 @@ text-align: center;
 
 .basket__list-item {
     @include direction(flex, flex-start, flex-start, null, null);
+    position: relative;
     padding-top: 12px;
     padding-bottom: 24px;
     &:not(:last-child) {
         border-bottom: 1px solid $gray-400;
         margin-bottom: 24px;
+    }
+    & .loader__remove-item {
+        position: absolute;
+        background-color: rgba($color: #000000, $alpha: .1);
+        width: 100%;
+        height: 90%;
     }
 }
 .basket__list_image-container {

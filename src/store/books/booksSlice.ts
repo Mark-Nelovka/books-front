@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { fetchHomeBooks, fetchBookByCategory,
+import { fetchBookByCategory,
 fetchAllBooks, fetchPopularBooks, fetchRecentlyBooks
 } from "./booksOperations";
 import { booksForPages, IBooksState, SuccessPayloadFetchHomeBooks, SuccessPayloadGetBookByCategory } from "./types";
@@ -36,30 +36,16 @@ export const initialState: IBooksState = {
 const BooksSlice = createSlice({
   name: "books",
   initialState,
-  reducers: {},
+  reducers: {
+    fetchHomeBooks(state, {payload}) {
+      const { categories, allBooks, mostViewed, recentlyAdded} = payload;
+      state.allBooks = allBooks;
+      state.categories = categories;
+      state.mostViewed = mostViewed;
+      state.recentlyAdded = recentlyAdded;
+    }
+  },
   extraReducers: (builder) => {
-    builder.addCase(fetchHomeBooks.pending, (state: IBooksState, _) => {
-      state.error = {};
-    });
-    builder.addCase(
-      fetchHomeBooks.fulfilled,
-      (
-        state: IBooksState,
-        { payload }: PayloadAction<SuccessPayloadFetchHomeBooks>,
-      ) => {
-        state.categories = payload.data.categories;
-        state.allBooks = payload.data.allBooks;
-        state.recentlyAdded = payload.data.recentlyAdded;
-        state.mostViewed = payload.data.mostViewed;
-      },
-    );
-    builder.addCase(
-      fetchHomeBooks.rejected,
-      (state: IBooksState, { payload }: any) => {
-        state.error.status = payload.response.data.status;
-        state.error.message = payload.response.data.message;
-      },
-    );
     builder.addCase(
       fetchBookByCategory.fulfilled,
       (
@@ -152,4 +138,5 @@ const BooksSlice = createSlice({
   },
 });
 
+export const {fetchHomeBooks} = BooksSlice.actions;
 export default BooksSlice.reducer;

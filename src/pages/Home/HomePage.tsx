@@ -13,6 +13,7 @@ import useSWR from "swr";
 import { ApiService } from "API/ApiService";
 import { fetchHomeBooks } from "store/books/booksSlice";
 import { booksForPages } from "store/books/types";
+import { BooksEndpoints } from "API/endpoints";
 
 export const api = new ApiService();
 
@@ -51,7 +52,7 @@ export default function HomePage(): JSX.Element {
   })
   const dispatch = useAppDispatch();
 
-  const { error } = useSWR('api/books/home', api.get, {
+  const { error } = useSWR(BooksEndpoints.homeBooks, api.get, {
     onSuccess(data) {
       const { categories, allBooks, mostViewed, recentlyAdded} = data.data;
       setBooks({

@@ -12,10 +12,10 @@ import BackIcon from 'assets/icons/arrow-left.svg';
 import BasketButton from 'components/BasketButton/BasketButton';
 import useSWR from 'swr'
 import SVGCustomIcon from 'general/SVG';
-import { ApiService } from 'API/ApiService';
 import { updateBasket } from 'store/user/userSlice';
 import Notiflix from 'notiflix';
 import { api } from './Home/HomePage';
+import { BooksEndpoints } from 'API/endpoints';
 
 export default function DetailsPage(): JSX.Element {
     const [book, setBook] = useState<Partial<TBook>>();
@@ -23,11 +23,11 @@ export default function DetailsPage(): JSX.Element {
   const params = useParams();
   const dispatch = useAppDispatch();
 
-  const { data, error, isLoading, mutate } = useSWR(`/api/books/${params.bookId}`, api.get, {
-    onSuccess(data) {
-      setBook(data.data);
-    }
-  });
+    const { data, error, isLoading, mutate } = useSWR(BooksEndpoints.dynamicBook(+params.bookId!), api.get, {
+      onSuccess(data) {
+        setBook(data.data);
+      }
+    });
 
   useEffect(() => {
     book && setBook(data.data);

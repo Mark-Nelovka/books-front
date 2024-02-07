@@ -5,6 +5,7 @@ import { Route, Routes } from "react-router-dom";
 import PrivateRoute from "routes/PrivateRoute";
 import PublickRoute from "routes/PublicRoute";
 import AuthPage from "pages/Auth/AuthPage";
+import { RoutesEndpoints } from "API/endpoints";
 
 const SearchPage = lazy(
   () => import("pages/SearchPage" /* webpackChunkName: "SearchPage" */)
@@ -33,7 +34,7 @@ function App() {
           <Suspense fallback={<Loader />}>
             <Routes>
               <Route
-                path="/"
+                path={RoutesEndpoints.base}
                 element={
                   <PublickRoute>
                     <AuthPage />
@@ -41,7 +42,7 @@ function App() {
                 }
               />
               <Route
-                path="/home"
+                path={RoutesEndpoints.home}
                 element={
                   <PrivateRoute>
                     <HomePage />
@@ -49,7 +50,7 @@ function App() {
                 }
               />
               <Route
-                path="/categories"
+                path={RoutesEndpoints.categories}
                 element={
                   <PrivateRoute>
                     <FullCategoryPage />
@@ -65,7 +66,7 @@ function App() {
                 }
               />
                <Route
-                path="/book/:bookId"
+                path={RoutesEndpoints.details}
                 element={
                   <PrivateRoute>
                     <DetailsPage />
@@ -73,7 +74,7 @@ function App() {
                 }
               />
               <Route
-                path="/user/basket"
+                path={RoutesEndpoints.basket}
                 element={
                   <PrivateRoute>
                     <BasketPage />

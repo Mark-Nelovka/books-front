@@ -18,11 +18,11 @@ import { api } from './Home/HomePage';
 import Notiflix from 'notiflix';
 import { updateBasket } from 'store/user/userSlice';
 import { counterOperations } from 'store/user/types';
+import { UserEndpoints } from 'API/endpoints';
 
 export function getCurrentPage(path: string) {
   return path.split('?')[0].split('/').reverse()[0];
 }
-
 
 export default function BooksListPage() {
     const [isLoading, setIsLoading] = useState(false);
@@ -31,6 +31,7 @@ export default function BooksListPage() {
     const dispatch = useAppDispatch();
     const location = useLocation();
     const navigate = useNavigate();
+    console.log(getCurrentPage(location.pathname))
 
     const fetchData = async (path: string) => {
       setIsLoading(true);
@@ -51,30 +52,30 @@ export default function BooksListPage() {
       setIsLoading(false);
     };
 
-    useEffect(() => {
-      switch (getCurrentPage(location.pathname)) {
-        case EPages.all:
-          state.allBooks.books.length === 0 
-          ? fetchData(`/${EPages.all}`) 
-          : setBooks(state.allBooks.books)
-          break;
-        case EPages.recently:
-          state.recentlyAdded.books.length === 0 
-          ? fetchData(`/${EPages.recently}`) 
-          : setBooks(state.recentlyAdded.books)
-          break;
-        case EPages.popular:
-          state.mostViewed.books.length === 0 
-          ? fetchData(`/${EPages.popular}`) 
-          : setBooks(state.mostViewed.books)
-          break;
-        default:
-          state.categoryBook.books.length === 0 
-          ? fetchData(`/${getCurrentPage(location.pathname)}${location.search}`) 
-          : setBooks(state.categoryBook.books)
-          break;
-      }
-    }, [state])
+    // useEffect(() => {
+    //   switch (getCurrentPage(location.pathname)) {
+    //     case EPages.all:
+    //       state.allBooks.books.length === 0 
+    //       ? fetchData(`/${EPages.all}`) 
+    //       : setBooks(state.allBooks.books)
+    //       break;
+    //     case EPages.recently:
+    //       state.recentlyAdded.books.length === 0 
+    //       ? fetchData(`/${EPages.recently}`) 
+    //       : setBooks(state.recentlyAdded.books)
+    //       break;
+    //     case EPages.popular:
+    //       state.mostViewed.books.length === 0 
+    //       ? fetchData(`/${EPages.popular}`) 
+    //       : setBooks(state.mostViewed.books)
+    //       break;
+    //     default:
+    //       state.categoryBook.books.length === 0 
+    //       ? fetchData(`/${getCurrentPage(location.pathname)}${location.search}`) 
+    //       : setBooks(state.categoryBook.books)
+    //       break;
+    //   }
+    // }, [state])
 
     useEffect(() => {
       let query = '';
@@ -91,6 +92,7 @@ export default function BooksListPage() {
       query = getCurrentPage(location.pathname) === EPages.category 
       ? `/${getCurrentPage(location.pathname)}?${EPages.category}=business`
       : `/${getCurrentPage(location.pathname)}` 
+      console.log(query)
       navigate(`/books/${query}`)
       fetchData(query)
     }, []);     
@@ -98,7 +100,7 @@ export default function BooksListPage() {
     const handleAddToCard = async (event: React.MouseEvent, book: TBook) => {
       event.stopPropagation();
       try {
-        await api.post('api/user/basket', book);
+        await api.post(UserEndpoints.userBasket, book);
         dispatch(updateBasket(counterOperations.increment));
       } catch (error) {
         Notiflix.Notify.failure(`${error}`);

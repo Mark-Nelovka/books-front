@@ -18,7 +18,8 @@ import { api } from './Home/HomePage';
 import Notiflix from 'notiflix';
 import { updateBasket } from 'store/user/userSlice';
 import { counterOperations } from 'store/user/types';
-import { UserEndpoints } from 'API/endpoints';
+import { BooksEndpoints, UserEndpoints } from 'API/endpoints';
+import useSWR from 'swr';
 
 export function getCurrentPage(path: string) {
   return path.split('?')[0].split('/').reverse()[0];
@@ -31,7 +32,29 @@ export default function BooksListPage() {
     const dispatch = useAppDispatch();
     const location = useLocation();
     const navigate = useNavigate();
-    console.log(getCurrentPage(location.pathname))
+
+    // switch (getCurrentPage(location.pathname)) {
+    //   case EPages.all:
+    //     useSWR(BooksEndpoints.allBooks, api.get, {
+    //       onSuccess(data, key, config) {
+            
+    //       },
+    //       onError(err, key, config) {
+            
+    //       },
+    //     })
+    //     break;
+    //   case EPages.recently:
+    //     await dispatch(fetchRecentlyBooks(path))
+    //     break;
+    //   case EPages.popular:
+    //     await dispatch(fetchPopularBooks(path))
+    //     break;
+    //   default:
+    //     await dispatch(fetchBookByCategory(path))
+    //     break;
+    // }
+    
 
     const fetchData = async (path: string) => {
       setIsLoading(true);
@@ -100,8 +123,9 @@ export default function BooksListPage() {
     const handleAddToCard = async (event: React.MouseEvent, book: TBook) => {
       event.stopPropagation();
       try {
-        await api.post(UserEndpoints.userBasket, book);
+        // await api.post(UserEndpoints.userBasket, book);
         dispatch(updateBasket(counterOperations.increment));
+        Notiflix.Notify.success('Book was added')
       } catch (error) {
         Notiflix.Notify.failure(`${error}`);
       }

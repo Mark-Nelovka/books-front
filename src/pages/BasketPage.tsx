@@ -1,6 +1,6 @@
 import Header from 'components/Header/Header'
 import Title from 'components/Title/Title'
-import React, { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { TBook } from 'store/books/types'
 import { useAppDispatch } from 'store/hook'
@@ -10,37 +10,40 @@ import DeleteIcon from "assets/icons/remove-icon.svg"
 import BackIcon from "assets/icons/arrow-left.svg";
 import useSWR from 'swr'
 import { updateBasket } from 'store/user/userSlice'
-import Notiflix from 'notiflix'
 import { api } from './Home/HomePage'
 import { counterOperations } from 'store/user/types'
 import { UserEndpoints } from 'API/endpoints'
+import useSWRMutation from 'swr/mutation'
+import Notiflix from 'notiflix'
 
 export default function BasketPage() {
     const [basketItems, setBasketItems] = useState<TBook[]>([]);
-    const [removeId, setRemoveId] = useState(0);
+    const [removeId, setRemoveId] = useState('');
     const dispatch = useAppDispatch()
     
     const { data, error, isLoading, mutate } = useSWR(UserEndpoints.userBasket, api.get, {
-        onSuccess(data) {
-            setBasketItems(data.data.books);
-            dispatch(updateBasket(data.data.books.length))
-        },
-        revalidateOnFocus: false
+        revalidateOnFocus: false,
     });
 
+    const { trigger: triggerRemoveFromBasket, isMutating: isMutatingBasket } = useSWRMutation(UserEndpoints.userBasket, api.delete);
+
     useEffect(() => {
-      basketItems.length > 0 && setBasketItems(data.data.books);
+        data && setBasketItems(data.data.books);
+        data && dispatch(updateBasket(data.data.books.length))
     }, [data])
     
 
-    const remove = async (id: number) => {
+    const remove = async (id: string) => {
         setRemoveId(id);
         try {
-            const updateBookList = await api.delete(UserEndpoints.userDeleteFromBasket(id))
+            const updateBookList = await triggerRemoveFromBasket(id)
             mutate(updateBookList, false);
             dispatch(updateBasket(counterOperations.decrement));
+            Notiflix.Notify.success('Book was deleted')
         } catch (error) {
             Notiflix.Notify.failure(`${error}`)
+        } finally {
+            setRemoveId('');
         }
     }
 

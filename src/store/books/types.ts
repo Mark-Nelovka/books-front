@@ -1,5 +1,5 @@
 export type TBook = {
-  id: number;
+  id: string;
   userId: number;
   title: string;
   description: string;

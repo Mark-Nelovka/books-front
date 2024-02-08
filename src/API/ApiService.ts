@@ -12,9 +12,9 @@ export class ApiService {
           }
       }
 
-      async post(endpoint: string, body: Partial<TBook>) {
+      async post(key: string, { arg }: {arg: Partial<TBook>}) {
         try {
-            const { data } = await axiosInstance.post(endpoint, body);
+            const { data } = await axiosInstance.post(key, arg);
             if(data.status !== 201) throw data;
             return data;
           } catch (error) {
@@ -22,9 +22,9 @@ export class ApiService {
           }
       }
 
-      async delete(endpoint: string) {
+      async delete(endpoint: string, { arg }: {arg: string}) {
         try {
-            const { data } = await axiosInstance.delete(endpoint);
+            const { data } = await axiosInstance.delete(`${endpoint}/${arg}`);
             if(data.status !== 200) throw data;
             return data;
           } catch (error) {

@@ -3,7 +3,7 @@ import Title from 'components/Title/Title';
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { TBook } from 'store/books/types';
-import useLoaders, { RequestMethods, useAppDispatch } from 'store/hook';
+import { useAppDispatch } from 'store/hook';
 import Button from 'ui/Button/Button';
 import { Loader, LoaderPropagate } from 'ui/Loader/Loader';
 import Footer from 'components/Footer/Footer';
@@ -11,47 +11,46 @@ import ControlledCarousel from 'components/Slider/Slider';
 import BackIcon from 'assets/icons/arrow-left.svg';
 import BasketButton from 'components/BasketButton/BasketButton';
 import useSWR from 'swr'
+import useSWRMutation from 'swr/mutation'
 import SVGCustomIcon from 'general/SVG';
 import { updateBasket } from 'store/user/userSlice';
 import Notiflix from 'notiflix';
 import { api } from './Home/HomePage';
-import { BooksEndpoints } from 'API/endpoints';
+import { BooksEndpoints, UserEndpoints } from 'API/endpoints';
 
 export default function DetailsPage(): JSX.Element {
     const [book, setBook] = useState<Partial<TBook>>();
-    const [loaders, changeLoaders] = useLoaders();
   const params = useParams();
   const dispatch = useAppDispatch();
 
-    const { data, error, isLoading, mutate } = useSWR(BooksEndpoints.dynamicBook(+params.bookId!), api.get, {
-      onSuccess(data) {
-        setBook(data.data);
-      }
-    });
+    const { data, error, isLoading, mutate } = useSWR(BooksEndpoints.dynamicBook(+params.bookId!), api.get);
+    
+    const { trigger: triggerBasket, isMutating: isMutatingBasket } = useSWRMutation(UserEndpoints.userBasket, api.post);
+    const { trigger: triggerFavorites } = useSWRMutation(UserEndpoints.userFavorites, api.post);
+    const { trigger: triggerDeleteFromFavorites } = useSWRMutation(UserEndpoints.userFavorites, api.delete);
 
   useEffect(() => {
-    book && setBook(data.data);
+    data && setBook(data.data);
   }, [data])
   
-  
   const handleAddToCart = async () => {
-    changeLoaders(RequestMethods.POST);
     try {
-      const updateCart = await api.post(`/api/user/basket`, book!)
-      await mutate({data: {...book, isAddedToCart: true}}, false);
-      dispatch(updateBasket(updateCart.count));
+      const addedResult = await triggerBasket(book!)
+      await mutate({data: {...book, isAddedToCart: true}}, false)
+      dispatch(updateBasket(addedResult.count));
+      Notiflix.Notify.success('Book was added to your basket')
     } catch (error) {
       Notiflix.Notify.failure(`${error}`)
-    } finally {
-      changeLoaders()
-    }
+    } 
   }
 
   const handleFavorites = async () => {
+    let resultIsFavorite;
   if(book && !book.isFavorite) {
     try {
-      await api.post('api/user/favorites', book);
+      resultIsFavorite = await triggerFavorites(book);
       mutate({data: {...book, isFavorite: true}}, false)
+      Notiflix.Notify.success('Book was added to your favorites')
     } catch (error) {
       Notiflix.Notify.failure(`${error}`)
     }
@@ -59,8 +58,9 @@ export default function DetailsPage(): JSX.Element {
   }
   if(book && book.isFavorite) {
     try {
-      await api.delete(`api/user/favorites/${book.id}`);
+      resultIsFavorite = await triggerDeleteFromFavorites(book.id!);
       mutate({data: {...book, isFavorite: false}}, false);
+      Notiflix.Notify.success('Book was deleted from your favorites')
     } catch (error) {
       Notiflix.Notify.failure(`${error}`)
     }
@@ -107,9 +107,9 @@ export default function DetailsPage(): JSX.Element {
         <p><span>Dimensions:</span><span>{book.dimensions}</span></p>
         </div>
         <Button id='button-add-to-card' disabled={book.isAddedToCart} style='details__button-add ' func={handleAddToCart} type='button'>
-            {loaders.postLoader && <LoaderPropagate />}
-            {!loaders.postLoader && book.isAddedToCart && 'In cart'}
-            {!loaders.postLoader && !book.isAddedToCart && 'Add to Cart'}
+            {isMutatingBasket && <LoaderPropagate />}
+            {!isMutatingBasket && book.isAddedToCart && 'In cart'}
+            {!isMutatingBasket && !book.isAddedToCart && 'Add to Cart'}
         </Button>
       </div>
       <BasketButton />

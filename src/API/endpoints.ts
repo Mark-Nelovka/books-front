@@ -30,10 +30,7 @@ export const AuthEndpoints = {
     userOnboarding: '/api/user/onboarding',
     userGetAvatar: (id: number) => `/api/user/${id}/avatar`,
     userStorage: '/api/user/storage',
-    userDeleteFromStorage: (itemId: number) => `/api/user/storage/${itemId}`,
     userFavorites: '/api/user/favorites',
-    userDeleteFromFavorites: (bookId: number) => `/api/user/favorites/${bookId}`,
     userBasket: '/api/user/basket',
-    userDeleteFromBasket: (bookId: number) => `/api/user/basket/${bookId}`,
     userUpdate: (id: number) => `/api/user/${id}`
   }

@@ -36,7 +36,7 @@ export default function BasketPage() {
     const remove = async (id: string) => {
         setRemoveId(id);
         try {
-            const updateBookList = await triggerRemoveFromBasket(id)
+            const updateBookList = await triggerRemoveFromBasket(+id)
             mutate(updateBookList, false);
             dispatch(updateBasket(counterOperations.decrement));
             Notiflix.Notify.success('Book was deleted')
@@ -73,7 +73,7 @@ export default function BasketPage() {
             && basketItems.length > 0 
             && basketItems.map((book) => {
                 return <li className='basket__list-item ' key={book.id}>
-                    {removeId === book.id && <div className='loader__remove-item'><LoaderFade /></div>}
+                    {removeId === String(book.id) && <div className='loader__remove-item'><LoaderFade /></div>}
                     <div className='basket__list_image-container'>
                         <img src={book.images[0]} alt={book.title} />
                     </div>
@@ -84,7 +84,7 @@ export default function BasketPage() {
                     </div>
                     <Button 
                     id='button-basket-delete' 
-                    func={() => remove(book.id)} 
+                    func={() => remove(String(book.id))} 
                     type='button' 
                     style='basket__delete-button'>
                         <img src={DeleteIcon} alt='Basket delete icon' />

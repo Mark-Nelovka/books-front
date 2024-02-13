@@ -13,14 +13,9 @@ export const AuthEndpoints = {
   }
   
   export const BooksEndpoints = {
-    homeBooks: 'api/books/home',
-    allBooks: 'api/books/all',
-    popularBooks: 'api/books/popular',
-    recentlyBooks: 'api/books/recently',
-    dynamicBook: (bookId: number) => `api/books/${bookId}`,
-    addBooks: '/api/books',
-    updateBook: (bookId: number) => `/api/books/${bookId}`,
-    booksByCategory: (categoryName: string) => `/api/books/category?category=${categoryName}`,
+    dynamicRoute: (params: string) => `/api/books/${params}`,
+    baseBookRoute: '/api/books',
+    // booksByCategory: `/api/books/category`,
     searchBooks: (inputSearchValue: string) => `/api/books/search?search=${inputSearchValue}`,
     searchSelectionUser: (bookId: number | number[]) => `/api/books/search/user-selection?id=${bookId}` 
   }

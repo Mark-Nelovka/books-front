@@ -17,15 +17,15 @@ import { updateBasket } from 'store/user/userSlice';
 import Notiflix from 'notiflix';
 import { api } from './Home/HomePage';
 import { BooksEndpoints, UserEndpoints } from 'API/endpoints';
+import { counterOperations } from 'store/user/types';
 
 export default function DetailsPage(): JSX.Element {
     const [book, setBook] = useState<Partial<TBook>>();
   const params = useParams();
   const dispatch = useAppDispatch();
 
-    const { data, error, isLoading, mutate } = useSWR(BooksEndpoints.dynamicBook(+params.bookId!), api.get);
-    
-    const { trigger: triggerBasket, isMutating: isMutatingBasket } = useSWRMutation(UserEndpoints.userBasket, api.post);
+  const { data, error, isLoading, mutate } = useSWR(BooksEndpoints.dynamicRoute(params.bookId!), api.get);
+  const { trigger: triggerBasket, isMutating: isMutatingBasket } = useSWRMutation(UserEndpoints.userBasket, api.post);
     const { trigger: triggerFavorites } = useSWRMutation(UserEndpoints.userFavorites, api.post);
     const { trigger: triggerDeleteFromFavorites } = useSWRMutation(UserEndpoints.userFavorites, api.delete);
 
@@ -35,9 +35,9 @@ export default function DetailsPage(): JSX.Element {
   
   const handleAddToCart = async () => {
     try {
-      const addedResult = await triggerBasket(book!)
+      await triggerBasket(book!)
       await mutate({data: {...book, isAddedToCart: true}}, false)
-      dispatch(updateBasket(addedResult.count));
+      dispatch(updateBasket(counterOperations.increment));
       Notiflix.Notify.success('Book was added to your basket')
     } catch (error) {
       Notiflix.Notify.failure(`${error}`)

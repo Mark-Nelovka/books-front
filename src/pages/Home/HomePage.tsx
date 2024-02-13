@@ -12,8 +12,9 @@ import BasketButton from "components/BasketButton/BasketButton";
 import useSWR from "swr";
 import { ApiService } from "API/ApiService";
 import { fetchHomeBooks } from "store/books/booksSlice";
-import { booksForPages } from "store/books/types";
+import { TBook, booksForPages } from "store/books/types";
 import { BooksEndpoints } from "API/endpoints";
+import { getCurrentPage } from "pages/BooksListPage";
 
 export const api = new ApiService();
 
@@ -52,20 +53,25 @@ export default function HomePage(): JSX.Element {
   })
   const dispatch = useAppDispatch();
 
-  const { error } = useSWR(BooksEndpoints.homeBooks, api.get, {
+  const { error } = useSWR(BooksEndpoints.dynamicRoute(getCurrentPage(location.pathname)), api.get, {
     onSuccess(data) {
       const { categories, allBooks, mostViewed, recentlyAdded} = data.data;
       setBooks({
         categories,
         mostViewed,
         recentlyAdded,
-        allBooks
+        allBooks,
       })
-    }
+    },
+    onError(err) {
+      console.log('🚀 ------------------------------------------------🚀');
+      console.log('🚀 ~ file: HomePage.tsx:67 ~ onError ~ err:', err);
+      console.log('🚀 ------------------------------------------------🚀');
+    },
   });
 
   useEffect(() => {
-    dispatch(fetchHomeBooks(books));
+    books && dispatch(fetchHomeBooks(books));
   }, [books]);
 
   return (

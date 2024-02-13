@@ -1,6 +1,6 @@
 import React from "react";
 import { TBook } from "store/books/types";
-import { Loader } from "ui/Loader/Loader";
+import { Loader, LoaderPropagate } from "ui/Loader/Loader";
 import EyeIcon from "assets/icons/eye.svg";
 import { useNavigate } from "react-router-dom";
 import Button from "ui/Button/Button";
@@ -10,6 +10,8 @@ interface IPropsCategoryList {
   page: string;
   decoration?: string;
   handleAddToCard?: (event: React.MouseEvent, book: TBook) => void;
+  isMutatingBasket?: boolean;
+  addedId?: string;
 }
 
 export enum EPages {
@@ -20,14 +22,15 @@ export enum EPages {
   popular = "popular",
 }
 
-export default function BookList({ items, page, decoration, handleAddToCard }: IPropsCategoryList) {
+export default function BookList({ items, page, decoration, handleAddToCard, isMutatingBasket, addedId }: IPropsCategoryList) {
   const navigate = useNavigate();
 
   const goToDetailsPage = (event: React.MouseEvent) => {
     const liElement = (event.target as HTMLLIElement).closest('li');
     if (liElement) {
       const bookId = liElement.id;
-      navigate(`/book/${bookId}`)
+      const chosenBook = items.find(book => book.id === +bookId);
+      chosenBook && navigate(`/book/${bookId}`)
     }
   }
 
@@ -61,8 +64,12 @@ export default function BookList({ items, page, decoration, handleAddToCard }: I
                 {book.title.at(0)?.toUpperCase() + book.title.slice(1)}
               </p>
               <p className="home__book-list_item-category">{book.category}</p>
-              {handleAddToCard && <Button id='button-add-to-card' style='details__button-add ' func={(event) => handleAddToCard(event,book)} type='button'>
-            Add to Cart
+              {handleAddToCard && <Button id='button-add-to-card' style='details__button-add ' func={(event) => handleAddToCard(event,book)} disabled={book.isAddedToCart} type='button'>
+              {isMutatingBasket && addedId === String(book.id) && <LoaderPropagate />}
+              {isMutatingBasket && addedId !== String(book.id) && !book.isAddedToCart && 'Add to cart'}
+              {isMutatingBasket && addedId !== String(book.id) &&  book.isAddedToCart && 'In cart'}
+              {!isMutatingBasket && book.isAddedToCart && 'In cart'}
+              {!isMutatingBasket && !book.isAddedToCart && 'Add to cart'}
         </Button>}
             </li>
           );

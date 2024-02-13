@@ -4,108 +4,53 @@ import BackIcon from 'assets/icons/arrow-left.svg';
 import Button from 'ui/Button/Button';
 import Title from 'components/Title/Title';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from 'store/hook';
-import { fetchAllBooks, fetchBookByCategory, 
-  fetchPopularBooks, fetchRecentlyBooks 
-} from 'store/books/booksOperations';
+import { useAppDispatch } from 'store/hook';
 import Footer from 'components/Footer/Footer';
 import BookList, { EPages } from 'components/BookList/BookList';
 import { Loader } from 'ui/Loader/Loader';
 import Filter from 'components/Filter/Filter';
 import { TBook } from 'store/books/types';
 import BasketButton from 'components/BasketButton/BasketButton';
-import { api } from './Home/HomePage';
 import Notiflix from 'notiflix';
 import { updateBasket } from 'store/user/userSlice';
 import { counterOperations } from 'store/user/types';
 import { BooksEndpoints, UserEndpoints } from 'API/endpoints';
-import useSWR from 'swr';
+import { api } from './Home/HomePage';
+import useSWRMutation from 'swr/mutation';
 
 export function getCurrentPage(path: string) {
   return path.split('?')[0].split('/').reverse()[0];
 }
 
+export function getCategoryName(searchPath: string) {
+  return searchPath.split('=')[1].split('&')[0];
+}
+
 export default function BooksListPage() {
-    const [isLoading, setIsLoading] = useState(false);
     const [books, setBooks] = useState<TBook[]>([]);
-    const state = useAppSelector(state => state.books);
+    const [addedId, setAddedId] = useState('');
     const dispatch = useAppDispatch();
     const location = useLocation();
     const navigate = useNavigate();
 
-    // switch (getCurrentPage(location.pathname)) {
-    //   case EPages.all:
-    //     useSWR(BooksEndpoints.allBooks, api.get, {
-    //       onSuccess(data, key, config) {
-            
-    //       },
-    //       onError(err, key, config) {
-            
-    //       },
-    //     })
-    //     break;
-    //   case EPages.recently:
-    //     await dispatch(fetchRecentlyBooks(path))
-    //     break;
-    //   case EPages.popular:
-    //     await dispatch(fetchPopularBooks(path))
-    //     break;
-    //   default:
-    //     await dispatch(fetchBookByCategory(path))
-    //     break;
-    // }
-    
+    const { trigger, isMutating, error, data } = useSWRMutation(BooksEndpoints.baseBookRoute.trim(), api.getMutation);
+    const { trigger: triggerBasket, isMutating: isMutatingBasket } = useSWRMutation(UserEndpoints.userBasket, api.post);
 
-    const fetchData = async (path: string) => {
-      setIsLoading(true);
-      switch (getCurrentPage(path)) {
-        case EPages.all:
-          await dispatch(fetchAllBooks(path))
-          break;
-        case EPages.recently:
-          await dispatch(fetchRecentlyBooks(path))
-          break;
-        case EPages.popular:
-          await dispatch(fetchPopularBooks(path))
-          break;
-        default:
-          await dispatch(fetchBookByCategory(path))
-          break;
-      }
-      setIsLoading(false);
-    };
+    useEffect(() => {
+      data && setBooks(data.data.books);
+      data && console.log(data.data.books)
+    }, [data])
 
-    // useEffect(() => {
-    //   switch (getCurrentPage(location.pathname)) {
-    //     case EPages.all:
-    //       state.allBooks.books.length === 0 
-    //       ? fetchData(`/${EPages.all}`) 
-    //       : setBooks(state.allBooks.books)
-    //       break;
-    //     case EPages.recently:
-    //       state.recentlyAdded.books.length === 0 
-    //       ? fetchData(`/${EPages.recently}`) 
-    //       : setBooks(state.recentlyAdded.books)
-    //       break;
-    //     case EPages.popular:
-    //       state.mostViewed.books.length === 0 
-    //       ? fetchData(`/${EPages.popular}`) 
-    //       : setBooks(state.mostViewed.books)
-    //       break;
-    //     default:
-    //       state.categoryBook.books.length === 0 
-    //       ? fetchData(`/${getCurrentPage(location.pathname)}${location.search}`) 
-    //       : setBooks(state.categoryBook.books)
-    //       break;
-    //   }
-    // }, [state])
+    useEffect(() => {
+      trigger('/' + getCurrentPage(location.pathname) + location.search);
+    }, [])
 
     useEffect(() => {
       let query = '';
       if(location.state) {
         if(getCurrentPage(location.pathname) === EPages.category) {
           query = `/${getCurrentPage(location.pathname)}${location.search}`;
-          fetchData(query)
+          trigger(query)
           return;
         } else {
           setBooks(location.state.items.books)
@@ -115,20 +60,26 @@ export default function BooksListPage() {
       query = getCurrentPage(location.pathname) === EPages.category 
       ? `/${getCurrentPage(location.pathname)}?${EPages.category}=business`
       : `/${getCurrentPage(location.pathname)}` 
-      console.log(query)
       navigate(`/books/${query}`)
-      fetchData(query)
+      trigger(query)
     }, []);     
     
     const handleAddToCard = async (event: React.MouseEvent, book: TBook) => {
       event.stopPropagation();
+      setAddedId(String(book.id));
       try {
-        // await api.post(UserEndpoints.userBasket, book);
+        await triggerBasket(book!)
+        setBooks((prevState) => {
+          return prevState.map((el) => el.id === book.id 
+          ? {...el, isAddedToCart: true} : el
+          )
+        })
         dispatch(updateBasket(counterOperations.increment));
         Notiflix.Notify.success('Book was added')
       } catch (error) {
         Notiflix.Notify.failure(`${error}`);
       }
+      setAddedId('');
     }
 
   return (
@@ -144,10 +95,20 @@ export default function BooksListPage() {
           {location.state ? location.state.title.at(0).toUpperCase() + location.state.title.slice(1) : getCurrentPage(location.pathname).toUpperCase()}
         </Title>
       </Header>
-      <Filter fetchData={fetchData} />
+      <Filter fetchData={trigger} />
       <section>
-        {books.length > 0 && !isLoading && <BookList handleAddToCard={handleAddToCard} items={books} decoration={location.state ? location.state.decoration : location.pathname.slice(1).toLowerCase()} page={location.state ? location.state.page : location.pathname.slice(1).toLowerCase()} />}
-        {isLoading && <Loader size='100px' />}
+        {!isMutating && error && books.length === 0 && <p>Error: {error.message}</p> }
+        {!isMutating && !error && books.length === 0 && <p>Any book didn't found</p>}
+        {books.length > 0 && !isMutating && <BookList 
+        handleAddToCard={handleAddToCard} 
+        items={books} 
+        decoration={location.state ? location.state.decoration : location.pathname.slice(1).toLowerCase()} 
+        page={location.state ? location.state.page : location.pathname.slice(1).toLowerCase()}
+        isMutatingBasket={isMutatingBasket}
+        addedId={addedId} 
+        />
+        }
+        {isMutating && <Loader size='100px' />}
       </section>
       <BasketButton />
     </div>

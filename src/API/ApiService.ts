@@ -3,6 +3,7 @@ import { TBook } from "store/books/types";
 
 export class ApiService {
     async get(endpoint: string) {
+      // console.log(endpoint)
         try {
             const { data } = await axiosInstance.get(endpoint);
             if(!data.data) throw data;

@@ -55,10 +55,10 @@ export default function BookList({ items, page, decoration, handleAddToCard, isM
                     {book.view}
                   </p>
                 )}
-                <img
+                {/* <img
                   src={book.images.length > 0 ? book.images[0] : "No image"}
                   alt={`Image ${book.title} book`}
-                />
+                /> */}
               </div>
               <p className="home__book-list_item-title">
                 {book.title.at(0)?.toUpperCase() + book.title.slice(1)}

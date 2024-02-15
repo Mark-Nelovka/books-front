@@ -23,7 +23,6 @@
     margin-bottom: -20px;
     min-height: 225px;
     margin-right: -15px;
-    
 }
 
 .home__books-list_item:not([data-page-type="home"]) {
@@ -117,4 +116,19 @@ font-style: normal;
     padding: 2px 5px;
 font-style: normal;
     background-color: $white;
+}
+
+.button__load-more-books {
+    position: relative;
+    padding: 15px;
+    border-radius: 10px;
+    background-color: #7cccfd;
+    margin-top: 20px;
+    height: 50px;
+    width: 50%;
+    margin-left: 25%;
+    & .loader {
+        width: 15px;
+        height: 15px;
+    }
 }

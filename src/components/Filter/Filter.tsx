@@ -30,7 +30,9 @@ export interface ISortParametrs {
     min?: string;
     max?: string;
     category?: string;
-    // pageName?: pageWithSort;
+    page?: number;
+    offset?: number;
+    limit?: number;
   }
 
 interface IPropsGetUrlForRequest {
@@ -56,7 +58,10 @@ interface IPropsGetUrlForRequest {
 export default function Filter(props: {fetchData: (path: string) => void}) {
     const [sortParams, setSortParams] = useState<ISortParametrs>({
       min: '',
-      max: ''
+      max: '',
+      page: 1,
+      offset: 0,
+      limit: 20
     })
     const [filterForm, setFilterForm] = useState(false);
     const [filterList, setFilterList] = useState("");
